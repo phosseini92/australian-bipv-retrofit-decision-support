@@ -26,3 +26,8 @@ façade-cavity models. Transferred failure rates, repair time, handled scope, an
 some cost inputs remain explicitly provisional. Break-even values answer what
 would have to be true; they are not claims that those threshold values currently
 exist in the market.
+
+The selected TMYx package is nominally labelled 2011–2025, but its own header
+reports station data availability only for 2011–2015. Results therefore use the
+exact locked file but must not be represented as a typical year derived from
+fifteen complete years of measured station meteorology.

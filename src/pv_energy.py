@@ -59,6 +59,7 @@ class YearOneEnergyResult:
     surface_azimuth: float
     energy_kwh: float
     hourly: Any
+    weather_provenance: dict[str, Any]
 
 
 def run_year_one_energy(
@@ -133,13 +134,23 @@ def run_year_one_energy(
     hourly["p_dc_gross_w"] = electrical.p_dc_gross_w
     hourly["p_dc_net_w"] = electrical.p_dc_net_w
     hourly["p_ac_w"] = electrical.p_ac_w
+    if weather.source_index is not None:
+        if len(weather.source_index) != len(hourly):
+            raise ValueError("source and normalized weather indices differ in length")
+        hourly["epw_source_timestamp"] = weather.source_index.astype(str).to_numpy()
+        hourly["epw_source_year"] = weather.source_index.year.to_numpy()
     energy_kwh = integrate_ac_energy_kwh(electrical.p_ac_w, weather.timestep_hours)
     return YearOneEnergyResult(
         mounting=mounting,
         surface_azimuth=surface_azimuth,
         energy_kwh=energy_kwh,
         hourly=hourly,
+        weather_provenance={
+            "source_path": str(weather.source_path),
+            "source_sha256": weather.source_sha256,
+            "normalization": dict(weather.normalization),
+        },
     )
 
 
-IMPLEMENTATION_STATUS = "IMPLEMENTED_AWAITING_LOCKED_EPW"
+IMPLEMENTATION_STATUS = "IMPLEMENTED_CONTROLLED_EPW_VALIDATED"

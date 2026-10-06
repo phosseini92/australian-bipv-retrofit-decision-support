@@ -1,6 +1,12 @@
 {
   "manifest_version": "0.1.0",
   "generated_from_locked_sources": true,
+  "controlled_weather": {
+    "manifest": "data/weather/weather_manifest.json",
+    "filename": "AUS_VIC_Melbourne.RO.948680_TMYx.2011-2025.epw",
+    "sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
+    "repository_storage": "local_gitignored_input"
+  },
   "sources": [
     {
       "id": "research_design",

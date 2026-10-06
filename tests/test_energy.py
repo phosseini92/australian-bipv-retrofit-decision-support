@@ -3,8 +3,11 @@ from pathlib import Path
 import unittest
 
 import pandas as pd
+import pvlib
 
+from src.config_loader import load_variants
 from src.electrical import calculate_electrical_power, integrate_ac_energy_kwh
+from src.energy_qa import build_variant_energy_records, evaluate_q01_to_q05
 from src.input_loader import load_symbol_index
 from src.irradiance import (
     POA_AUDIT_COLUMNS,
@@ -14,7 +17,21 @@ from src.irradiance import (
 )
 from src.pv_energy import EnergyParameters, run_year_one_energy
 from src.temperature import calculate_mounting_temperatures
-from src.weather import WeatherDataset, WeatherValidationError, validate_weather_frame
+from src.weather import (
+    WeatherDataset,
+    WeatherValidationError,
+    load_epw,
+    validate_weather_frame,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+LOCKED_EPW = (
+    ROOT
+    / "data"
+    / "weather"
+    / "AUS_VIC_Melbourne.RO.948680_TMYx.2011-2025.epw"
+)
 
 
 class LockedEnergyInputTests(unittest.TestCase):
@@ -187,6 +204,55 @@ class EnergyImplementationTests(unittest.TestCase):
         self.assertEqual(result.energy_kwh, 0.0)
         self.assertEqual(len(result.hourly), 24)
         self.assertTrue((result.hourly["p_ac_w"] == 0.0).all())
+
+        ventilated = run_year_one_energy(
+            dataset,
+            mounting="ventilated",
+            surface_azimuth=0.0,
+        )
+        variants = load_variants()["variants"]
+        records = build_variant_energy_records(
+            variants,
+            {"direct": result, "ventilated": ventilated},
+            {
+                "A_BIPV_m2": 1.0,
+                "PVtech": "test fixture",
+                "Pdc0_kWp": 1.0,
+                "INV": "test fixture",
+                "Pac0_kW": 1.0,
+            },
+        )
+        qa = evaluate_q01_to_q05(
+            records,
+            {"direct": result, "ventilated": ventilated},
+            pac0_kw=150.0,
+        )
+        self.assertEqual([item.id for item in qa], [f"Q{i:02d}" for i in range(1, 6)])
+        self.assertTrue(all(item.status == "PASS" for item in qa))
+
+    @unittest.skipUnless(LOCKED_EPW.is_file(), "controlled EPW not present locally")
+    def test_locked_epw_hash_metadata_and_mixed_year_normalization(self):
+        dataset = load_epw(LOCKED_EPW)
+        pvlib_coerced, _ = pvlib.iotools.read_epw(LOCKED_EPW, coerce_year=2001)
+        self.assertEqual(len(dataset.data), 8760)
+        self.assertTrue(dataset.data.index.is_monotonic_increasing)
+        self.assertTrue(dataset.data.index.is_unique)
+        self.assertEqual(str(dataset.data.index.tz), "UTC+10:00")
+        self.assertEqual(dataset.data.index[0].year, 2001)
+        self.assertEqual(dataset.data.index[-1].year, 2001)
+        self.assertFalse(dataset.source_index.is_monotonic_increasing)
+        pd.testing.assert_index_equal(dataset.data.index, pvlib_coerced.index)
+        for column in ("temp_air", "wind_speed", "ghi", "dni", "dhi"):
+            expected = pvlib_coerced[column]
+            if column in ("ghi", "dni", "dhi"):
+                expected = expected.clip(lower=0.0)
+            pd.testing.assert_series_equal(
+                dataset.data[column], expected, check_freq=False
+            )
+        self.assertEqual(
+            dataset.source_sha256,
+            "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
+        )
 
 
 if __name__ == "__main__":

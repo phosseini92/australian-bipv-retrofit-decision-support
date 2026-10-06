@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
-  "status": "ENERGY_MODULE_IMPLEMENTED_PENDING_EPW",
+  "status": "ENERGY_GATE_PASSED_BASELINE_DISABLED",
   "simulation_enabled": false,
   "module_status": {
-    "weather": "implemented_awaiting_locked_epw",
-    "irradiance": "implemented_unit_tested",
-    "temperature": "implemented_unit_tested",
-    "electrical": "implemented_unit_tested",
-    "pv_energy": "implemented_awaiting_locked_epw",
+    "weather": "controlled_epw_validated",
+    "irradiance": "controlled_epw_integration_passed",
+    "temperature": "controlled_epw_integration_passed",
+    "electrical": "controlled_epw_integration_passed",
+    "pv_energy": "q01_to_q05_passed",
     "lifecycle_and_decision_modules": "skeleton_only"
   },
   "input_source": "data/inputs/source_manifest.yaml",

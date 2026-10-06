@@ -17,14 +17,16 @@ This version contains:
 - structural tests for the locked research contract.
 
 The v0.1 structure and locked-input contract have been formally audited. The
-hourly energy chain is now implemented and unit-tested through EPW validation,
+hourly energy chain is implemented and validated with the controlled EPW through
 Perez-Driesse POA, physical beam/diffuse IAM, mounting-specific SAPM cell
 temperature, PVWatts DC, the locked loss stack, inverter conversion, clipping,
 and year-one AC-energy integration.
 
-Baseline simulation remains intentionally disabled. The exact locked EPW is not
-present, and lifecycle/decision modules remain skeletons. No baseline result has
-been generated.
+The energy-only integration gate has passed Q01–Q05. Direct-mount year-one AC
+energy is 161,751.981 kWh and ventilated-mount energy is 166,904.081 kWh for the
+locked north orientation. These are gate-validation results, not a completed
+baseline. Lifecycle/decision modules remain skeletons and baseline execution is
+still intentionally disabled.
 
 ## Controlled sources
 
@@ -38,19 +40,27 @@ Their SHA-256 digests are recorded in
 `data/inputs/source_manifest.yaml`. The binary source documents are not copied
 into the repository; the CSV exports retain workbook sheet and row locators.
 
+The controlled EPW is validated against `data/weather/weather_manifest.json`
+and remains Git-ignored. `docs/change_control/CC-001-tmyx-index-and-evidence-period.md`
+records the approved mixed-year calendar normalisation and the discrepancy
+between the nominal 2011–2025 package label and the header-reported 2011–2015
+station record.
+
 ## Install and validate
 
 ```bash
 python -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python analysis/run_energy_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
 formal audit and energy-module tests.
 
-The four analysis entry points continue to fail closed until the EPW gate and
-downstream implementation gates are passed.
+The baseline, sensitivity, Pareto, and break-even entry points continue to fail
+closed until the downstream implementation gates pass. `run_energy_gate.py` is
+the only authorised numerical runner at this stage.
 
 ## Repository map
 
@@ -61,7 +71,8 @@ downstream implementation gates are passed.
 - `analysis/`: guarded future entry points.
 - `tests/`: lock-integrity and static QA tests.
 - `docs/`: methodology, source, assumption-status, and scope notes.
-- `outputs/`: reserved locked output locations; no simulation results are present.
+- `outputs/`: reserved locked output locations; the energy-gate QA artifact is
+  explicitly marked as non-baseline.
 
 ## Change control
 

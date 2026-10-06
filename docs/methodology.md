@@ -22,6 +22,11 @@ AC clipping, and year-one energy integration. All numerical study inputs are
 read from the controlled snapshot; the named SAPM presets are resolved from the
 pinned pvlib version.
 
-No baseline result is generated until the exact locked EPW is supplied and its
-index/provenance pass validation. Lifecycle, cost, PSCF-informed evidence,
-Pareto, sensitivity, and break-even execution remain disabled.
+The exact locked EPW has passed hash, size, station-metadata, record-count,
+calendar, and source-year-map validation. Its mixed historical years are
+normalised under `CC-001` without changing row order or weather values, and the
+original timestamps remain in the hourly audit frame.
+
+The controlled energy-only integration has passed Q01–Q05. Lifecycle, cost,
+PSCF-informed evidence, Pareto, sensitivity, break-even, and full baseline
+execution remain disabled.

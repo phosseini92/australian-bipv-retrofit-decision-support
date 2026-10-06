@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "status": "CONTROLLED_LOCAL_INPUT",
+  "filename": "AUS_VIC_Melbourne.RO.948680_TMYx.2011-2025.epw",
+  "sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
+  "size_bytes": 1588781,
+  "source_url": "https://climate.onebuilding.org/WMO_Region_5_Southwest_Pacific/AUS_Australia/VIC_Victoria/AUS_VIC_Melbourne.RO.948680_TMYx.2011-2025.zip",
+  "station": {
+    "name": "Melbourne.RO",
+    "region": "VIC",
+    "country": "AUS",
+    "wmo": "948680",
+    "latitude": -37.8075,
+    "longitude": 144.97,
+    "timezone_utc_offset_hours": 10.0,
+    "elevation_m": 32.0
+  },
+  "records": 8760,
+  "nominal_package_period": "2011-2025",
+  "epw_header_period_of_record": "2011-2015",
+  "source_year_by_month": {
+    "01": 2014,
+    "02": 2012,
+    "03": 2014,
+    "04": 2013,
+    "05": 2015,
+    "06": 2012,
+    "07": 2014,
+    "08": 2012,
+    "09": 2014,
+    "10": 2011,
+    "11": 2012,
+    "12": 2011
+  },
+  "index_normalization": {
+    "approved": true,
+    "approval_date": "2026-10-06",
+    "classification": "engineering_time-index_normalization",
+    "target_year": 2001,
+    "timezone": "fixed UTC+10:00",
+    "rule": "Preserve all 8760 EPW rows in file order; verify month/day/hour against a non-leap calendar; replace only the mixed source-year index with 2001-01-01 00:00 through 2001-12-31 23:00; retain the original source index for audit.",
+    "leap_day_rule": "hard fail; no leap-day deletion or interpolation is permitted"
+  },
+  "evidence_note": "The locked filename is correct, but the EPW COMMENTS 1 header reports only five available source years (2011-2015). The nominal 2011-2025 label must not be interpreted as fifteen complete years of station meteorology."
+}

@@ -13,3 +13,8 @@ The CSV snapshot preserves blank low/high values rather than filling them. The
 code must not substitute defaults for missing values or convert missing values to
 zero. Any future change to a controlled value must occur in a versioned source
 artifact before it is reflected in code.
+
+`CC-001` is not an added research assumption. It is an approved engineering
+normalisation that replaces only the mixed historical year labels in the TMYx
+index. All 8,760 source rows, values, calendar positions, and original
+timestamps are preserved and audited.

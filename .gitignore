@@ -12,3 +12,4 @@ outputs/figures/*
 data/weather/*
 !data/weather/.gitkeep
 !data/weather/README.md
+!data/weather/weather_manifest.json

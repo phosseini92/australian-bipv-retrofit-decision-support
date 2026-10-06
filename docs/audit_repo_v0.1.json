@@ -1,11 +1,11 @@
 {
   "audit_date": "2026-10-06",
   "scope": "Repo v0.1 skeleton and energy implementation gate",
-  "summary": {"PASS": 26, "MISMATCH": 4, "BLOCKER": 3, "total": 33},
+  "summary": {"PASS": 28, "MISMATCH": 5, "BLOCKER": 1, "total": 34},
   "disposition": {
-    "research_contract": "PASS",
+    "computational_contract": "PASS",
     "repo_skeleton": "PASS",
-    "energy_implementation": "CONDITIONAL_PASS",
+    "energy_implementation": "PASS",
     "baseline_execution": "BLOCKED",
     "public_github_release": "HOLD"
   },
@@ -13,13 +13,19 @@
     {"id": "A04", "item": "Original controlled binaries are not vendored"},
     {"id": "G01", "item": "Public license is not selected"},
     {"id": "G02", "item": "Citation author/release metadata is incomplete"},
-    {"id": "G03", "item": "GitHub remote and release/tag are absent"}
+    {"id": "G03", "item": "GitHub remote and release/tag are absent"},
+    {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"}
   ],
   "blockers": [
-    {"id": "E02", "item": "Locked Melbourne TMYx EPW is absent"},
-    {"id": "E13", "item": "Baseline energy assertions cannot run without the EPW"},
     {"id": "B01", "item": "Downstream lifecycle and decision modules remain skeletons"}
   ],
-  "test_evidence": {"tests_run": 37, "failures": 0, "errors": 0},
+  "test_evidence": {"tests_run": 38, "failures": 0, "errors": 0},
+  "energy_gate": {
+    "status": "PASS",
+    "weather_sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
+    "direct_E1_kwh": 161751.98052177395,
+    "ventilated_E1_kwh": 166904.08109413524,
+    "assertions": ["Q01", "Q02", "Q03", "Q04", "Q05"]
+  },
   "baseline_executed": false
 }

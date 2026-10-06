@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import timedelta, timezone
 from hashlib import sha256
+import json
 from pathlib import Path
 from typing import Any
 
 
-EXPECTED_EPW_FILENAME = "AUS_VIC_Melbourne.RO.948680_TMYx.2011-2025.epw"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+WEATHER_MANIFEST_PATH = PROJECT_ROOT / "data" / "weather" / "weather_manifest.json"
 REQUIRED_WEATHER_COLUMNS = ("temp_air", "wind_speed", "ghi", "dni", "dhi")
 IRRADIANCE_COLUMNS = ("ghi", "dni", "dhi")
 EXPECTED_HOURS = 8760
@@ -25,6 +28,13 @@ class WeatherDataset:
     timestep_hours: float
     source_path: Path
     source_sha256: str
+    source_index: Any | None = None
+    normalization: dict[str, Any] = field(default_factory=dict)
+
+
+def load_weather_manifest() -> dict[str, Any]:
+    with WEATHER_MANIFEST_PATH.open(encoding="utf-8") as stream:
+        return json.load(stream)
 
 
 def _runtime():
@@ -80,6 +90,81 @@ def validate_weather_frame(data: Any, *, expected_hours: int = EXPECTED_HOURS) -
     return timestep_hours
 
 
+def normalize_tmy_index(
+    data: Any,
+    metadata: dict[str, Any],
+    manifest: dict[str, Any],
+):
+    """Replace mixed source years with the approved non-leap audit calendar."""
+
+    np, pd, _ = _runtime()
+    raw_index = data.index.copy()
+    if not isinstance(raw_index, pd.DatetimeIndex) or raw_index.tz is None:
+        raise WeatherValidationError("raw EPW index must be timezone-aware")
+    if len(raw_index) != EXPECTED_HOURS or not raw_index.is_unique:
+        raise WeatherValidationError("raw EPW must contain 8760 unique timestamps")
+
+    rule = manifest["index_normalization"]
+    target_year = int(rule["target_year"])
+    if target_year % 4 == 0 and (target_year % 100 != 0 or target_year % 400 == 0):
+        raise WeatherValidationError("normalization target year must be non-leap")
+
+    offset_hours = float(metadata["TZ"])
+    expected_offset = float(manifest["station"]["timezone_utc_offset_hours"])
+    if offset_hours != expected_offset:
+        raise WeatherValidationError(
+            f"EPW timezone {offset_hours:g} does not match manifest {expected_offset:g}"
+        )
+    fixed_timezone = timezone(timedelta(hours=offset_hours))
+    normalized_index = pd.date_range(
+        start=pd.Timestamp(target_year, 1, 1, 0, tz=fixed_timezone),
+        periods=EXPECTED_HOURS,
+        freq="h",
+    )
+
+    raw_calendar = np.column_stack(
+        (raw_index.month, raw_index.day, raw_index.hour, raw_index.minute)
+    )
+    normalized_calendar = np.column_stack(
+        (
+            normalized_index.month,
+            normalized_index.day,
+            normalized_index.hour,
+            normalized_index.minute,
+        )
+    )
+    if not np.array_equal(raw_calendar, normalized_calendar):
+        raise WeatherValidationError(
+            "raw EPW month/day/hour sequence does not match a complete non-leap year"
+        )
+
+    observed_month_years: dict[str, int] = {}
+    for month in range(1, 13):
+        years = sorted(set(raw_index[raw_index.month == month].year))
+        if len(years) != 1:
+            raise WeatherValidationError(
+                f"month {month:02d} must map to exactly one TMY source year"
+            )
+        observed_month_years[f"{month:02d}"] = int(years[0])
+    expected_month_years = {
+        key: int(value) for key, value in manifest["source_year_by_month"].items()
+    }
+    if observed_month_years != expected_month_years:
+        raise WeatherValidationError("EPW source-year mapping does not match manifest")
+
+    normalized = data.copy()
+    normalized.index = normalized_index
+    normalization = {
+        "rule": rule["rule"],
+        "target_year": target_year,
+        "timezone": str(normalized_index.tz),
+        "raw_index_monotonic": bool(raw_index.is_monotonic_increasing),
+        "raw_index_unique": bool(raw_index.is_unique),
+        "source_year_by_month": observed_month_years,
+    }
+    return normalized, raw_index, normalization
+
+
 def load_epw(path: str | Path) -> WeatherDataset:
     """Read the exact locked EPW and apply only specified physical clipping.
 
@@ -89,16 +174,50 @@ def load_epw(path: str | Path) -> WeatherDataset:
     """
 
     _, _, pvlib = _runtime()
+    manifest = load_weather_manifest()
     source_path = Path(path).resolve()
-    if source_path.name != EXPECTED_EPW_FILENAME:
+    expected_filename = manifest["filename"]
+    if source_path.name != expected_filename:
         raise WeatherValidationError(
-            f"expected locked EPW filename {EXPECTED_EPW_FILENAME!r}; "
+            f"expected locked EPW filename {expected_filename!r}; "
             f"received {source_path.name!r}"
         )
     if not source_path.is_file():
         raise FileNotFoundError(source_path)
 
+    source_hash = file_sha256(source_path)
+    if source_hash != manifest["sha256"]:
+        raise WeatherValidationError(
+            f"locked EPW hash mismatch: expected {manifest['sha256']}, found {source_hash}"
+        )
+    if source_path.stat().st_size != int(manifest["size_bytes"]):
+        raise WeatherValidationError("locked EPW size does not match weather manifest")
+
     data, metadata = pvlib.iotools.read_epw(source_path)
+    expected_station = manifest["station"]
+    metadata_checks = {
+        "city": expected_station["name"],
+        "state-prov": expected_station["region"],
+        "country": expected_station["country"],
+        "WMO_code": expected_station["wmo"],
+        "latitude": expected_station["latitude"],
+        "longitude": expected_station["longitude"],
+        "TZ": expected_station["timezone_utc_offset_hours"],
+        "altitude": expected_station["elevation_m"],
+    }
+    for key, expected in metadata_checks.items():
+        observed = metadata.get(key)
+        if isinstance(expected, float):
+            if abs(float(observed) - expected) > 1e-9:
+                raise WeatherValidationError(
+                    f"EPW metadata mismatch for {key}: expected {expected}, found {observed}"
+                )
+        elif str(observed) != str(expected):
+            raise WeatherValidationError(
+                f"EPW metadata mismatch for {key}: expected {expected}, found {observed}"
+            )
+
+    data, source_index, normalization = normalize_tmy_index(data, metadata, manifest)
     data = data.copy()
     for column in IRRADIANCE_COLUMNS:
         data[column] = data[column].clip(lower=0.0)
@@ -108,8 +227,10 @@ def load_epw(path: str | Path) -> WeatherDataset:
         metadata=dict(metadata),
         timestep_hours=timestep_hours,
         source_path=source_path,
-        source_sha256=file_sha256(source_path),
+        source_sha256=source_hash,
+        source_index=source_index,
+        normalization=normalization,
     )
 
 
-IMPLEMENTATION_STATUS = "IMPLEMENTED_AWAITING_LOCKED_EPW"
+IMPLEMENTATION_STATUS = "IMPLEMENTED_CONTROLLED_EPW_VALIDATED"
