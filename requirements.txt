@@ -1,2 +1,4 @@
-# Milestone 0.1 uses the Python standard library only.
-# Numerical implementation dependencies will be added at the implementation gate.
+numpy==2.3.5
+pandas==2.2.3
+pvlib==0.16.1
+scipy==1.18.1

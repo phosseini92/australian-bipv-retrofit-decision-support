@@ -1,8 +1,9 @@
-"""Prevent numerical execution before the milestone 0.1 gate is accepted."""
+"""Prevent baseline execution until all required controlled inputs are present."""
 
 
 def refuse_simulation(entrypoint: str) -> None:
     raise SystemExit(
         f"{entrypoint}: simulation is intentionally disabled in Repo v0.1. "
-        "Accept the skeleton, input schema, variants and QA contract before implementation."
+        "The energy code is unit-tested, but the locked EPW and downstream "
+        "lifecycle/decision modules are not yet execution-ready."
     )

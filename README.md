@@ -4,7 +4,7 @@ Repository v0.1 implements the first controlled milestone for the APSRC study
 *Beyond Energy Yield: Lifecycle Value and Circularity Readiness of Australian
 BIPV Retrofits*.
 
-## Milestone 0.1 status
+## Repo v0.1 audit and energy-gate status
 
 This version contains:
 
@@ -16,9 +16,15 @@ This version contains:
 - module boundaries and analysis entry points; and
 - structural tests for the locked research contract.
 
-Numerical simulation is intentionally disabled. The energy, lifecycle, cost,
-PSCF-informed evidence, Pareto, sensitivity, and break-even modules are skeletons
-until this milestone is reviewed and accepted.
+The v0.1 structure and locked-input contract have been formally audited. The
+hourly energy chain is now implemented and unit-tested through EPW validation,
+Perez-Driesse POA, physical beam/diffuse IAM, mounting-specific SAPM cell
+temperature, PVWatts DC, the locked loss stack, inverter conversion, clipping,
+and year-one AC-energy integration.
+
+Baseline simulation remains intentionally disabled. The exact locked EPW is not
+present, and lifecycle/decision modules remain skeletons. No baseline result has
+been generated.
 
 ## Controlled sources
 
@@ -32,26 +38,30 @@ Their SHA-256 digests are recorded in
 `data/inputs/source_manifest.yaml`. The binary source documents are not copied
 into the repository; the CSV exports retain workbook sheet and row locators.
 
-## Validate milestone 0.1
-
-The validation suite uses the Python standard library:
+## Install and validate
 
 ```bash
-python -m unittest discover -s tests -v
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m unittest discover -s tests -v
 ```
 
-The four analysis entry points fail closed in this milestone. Running one prints
-an explicit message that simulation is disabled.
+`requirements-lock.txt` records the fully resolved environment used for the
+formal audit and energy-module tests.
+
+The four analysis entry points continue to fail closed until the EPW gate and
+downstream implementation gates are passed.
 
 ## Repository map
 
 - `config/`: locked variants, schema, model, sensitivity, and QA contract.
 - `data/inputs/`: machine-readable controlled-input snapshot and provenance.
-- `src/`: validation utilities plus locked module boundaries.
+- `src/`: validation utilities, the implemented energy chain, and downstream
+  locked module boundaries.
 - `analysis/`: guarded future entry points.
 - `tests/`: lock-integrity and static QA tests.
 - `docs/`: methodology, source, assumption-status, and scope notes.
-- `outputs/`: reserved locked output locations; no results are present in v0.1.
+- `outputs/`: reserved locked output locations; no simulation results are present.
 
 ## Change control
 

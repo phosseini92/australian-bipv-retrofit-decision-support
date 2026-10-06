@@ -1,0 +1,25 @@
+{
+  "audit_date": "2026-10-06",
+  "scope": "Repo v0.1 skeleton and energy implementation gate",
+  "summary": {"PASS": 26, "MISMATCH": 4, "BLOCKER": 3, "total": 33},
+  "disposition": {
+    "research_contract": "PASS",
+    "repo_skeleton": "PASS",
+    "energy_implementation": "CONDITIONAL_PASS",
+    "baseline_execution": "BLOCKED",
+    "public_github_release": "HOLD"
+  },
+  "mismatches": [
+    {"id": "A04", "item": "Original controlled binaries are not vendored"},
+    {"id": "G01", "item": "Public license is not selected"},
+    {"id": "G02", "item": "Citation author/release metadata is incomplete"},
+    {"id": "G03", "item": "GitHub remote and release/tag are absent"}
+  ],
+  "blockers": [
+    {"id": "E02", "item": "Locked Melbourne TMYx EPW is absent"},
+    {"id": "E13", "item": "Baseline energy assertions cannot run without the EPW"},
+    {"id": "B01", "item": "Downstream lifecycle and decision modules remain skeletons"}
+  ],
+  "test_evidence": {"tests_run": 37, "failures": 0, "errors": 0},
+  "baseline_executed": false
+}

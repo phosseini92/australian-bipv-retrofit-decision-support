@@ -1,7 +1,15 @@
 {
   "schema_version": "1.0",
-  "status": "LOCKED_SKELETON_ONLY",
+  "status": "ENERGY_MODULE_IMPLEMENTED_PENDING_EPW",
   "simulation_enabled": false,
+  "module_status": {
+    "weather": "implemented_awaiting_locked_epw",
+    "irradiance": "implemented_unit_tested",
+    "temperature": "implemented_unit_tested",
+    "electrical": "implemented_unit_tested",
+    "pv_energy": "implemented_awaiting_locked_epw",
+    "lifecycle_and_decision_modules": "skeleton_only"
+  },
   "input_source": "data/inputs/source_manifest.yaml",
   "invariants": {
     "common_across_variants": [
