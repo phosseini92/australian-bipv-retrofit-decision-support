@@ -1,8 +1,9 @@
-# Formal Audit — Repo v0.1 and Energy Implementation Gate
+# Formal Audit — Repo v0.1, Energy, and Lifecycle-Energy Gates
 
 Audit date: 2026-10-06  
 Audit scope: repository structure, controlled inputs, locked variant/design
-contract, QA registration, energy-module implementation, and readiness to run.  
+contract, QA registration, energy and lifecycle-energy implementation, and
+readiness to run.
 Decision rule: `PASS` means evidence satisfies the locked contract;
 `MISMATCH` means a non-scientific repository/release gap exists; `BLOCKER`
 means execution cannot safely proceed.
@@ -16,11 +17,13 @@ means execution cannot safely proceed.
 - Repo v0.1 skeleton gate: **PASS**.
 - Energy implementation gate: **PASS** — controlled EPW integration and Q01–Q05
   pass.
+- Lifecycle-energy gate: **PASS** — locked degradation, availability,
+  intervention-burden, and scheduled-year equations pass their scoped QA.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **28 PASS / 5 MISMATCH / 1 BLOCKER** across 34 checks.
+Summary: **35 PASS / 5 MISMATCH / 1 BLOCKER** across 41 checks.
 
 ## Controlled-source evidence
 
@@ -65,13 +68,20 @@ recomputed hashes of the three supplied files.
 | E12 | PASS | Q05 unit behaviour | Synthetic boundary tests confirm non-negative energy terms and AC clipping at the configured rating. Test fixtures are not study inputs. |
 | E13 | PASS | Controlled-file Q01–Q05 evaluation | All five energy assertions pass. Direct E1 is 161,751.981 kWh; ventilated E1 is 166,904.081 kWh; maximum AC powers are 115.300 and 122.769 kW respectively. |
 | E14 | MISMATCH | Weather evidence-period description | The locked filename and input rationale imply a 2011–2025 15-year typical-year basis, while the EPW header reports only five available station years, 2011–2015. The exact locked file is retained, and the limitation is disclosed in `CC-001` and all gate manifests. |
+| L01 | PASS | Locked lifecycle input binding | `T`, `d`, `N_mod,eq`, `λ_mod`, `DT_event`, handled/replaced scopes, disturbed areas, `k_rev,time`, and inverter service life are read from the controlled snapshot without defaults. |
+| L02 | PASS | Derived failure consistency | The implementation recomputes `f_fail = N_mod,eq × λ_mod` and `N_fail(T) = f_fail × T`, hard-failing if they differ from the locked cached workbook values. |
+| L03 | PASS | Linear degradation | Every annual factor uses `max(0, 1 - d×(y-1))`; year 1 is unchanged and no compound recursion or second LID deduction is present. |
+| L04 | PASS | Expected availability | Availability uses the locked failure rate, downtime, disturbed-area fraction, 8,760-hour denominator, clipping, and energy-weighted lifetime ratio. It remains separate from `L_sys`. |
+| L05 | PASS | Intervention and material burden | Cumulative disturbed area and handled scope follow the locked equations. Exactly one failed product is replaced per event; adjacent assembly products do not inflate replacement mass. The 25.5-kg unit mass is recovered exactly from locked `M_EOL × 1000 / N_mod,eq`. |
+| L06 | PASS | Scheduled inverter years | Service-life multiples strictly within the horizon reproduce the locked cases: year 15 for T=25/30 and years 15 and 30 for T=35. The monetary allowance remains for the cost gate. |
+| L07 | PASS | Controlled lifecycle-energy integration | All eight variants produce finite, non-negative 30-year metrics. Scoped Q04, Q06–Q09, and Q14 checks pass; connection has no assumed time benefit, and replacement scope affects net energy only through disturbed-area availability. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 38 tests pass: input integrity, variant matrix, lifecycle/cost/circularity contracts, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, and energy unit/integration tests. |
+| V02 | PASS | Automated validation | 53 tests pass: input integrity, variant matrix, lifecycle/cost/circularity contracts, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, energy tests, and lifecycle equation/integration tests. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | Even after E02, lifecycle, cost, PSCF, Pareto, sensitivity, and break-even modules remain skeletons. The analysis runners correctly stay disabled until those gates are implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy-only gate was executed. No lifecycle baseline, sensitivity, Pareto, break-even table, or figure was generated. |
+| B01 | BLOCKER | Full baseline execution | Cost, PSCF, Pareto, sensitivity, and break-even modules remain skeletons. The baseline runner correctly stays disabled until those gates are implemented and tested. |
+| S01 | PASS | No premature baseline | The authorised energy and lifecycle-energy gates were executed. No formal baseline, sensitivity, Pareto, break-even table, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -93,18 +103,16 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete and test lifecycle degradation, availability, and intervention
-   burden without changing the passed first-year energy gate.
-2. Complete cost/replacement, PSCF-informed
+1. Complete cost/replacement and PSCF-informed
    evidence, Pareto, sensitivity, and break-even modules.
-3. Resolve license, citation authorship, and GitHub remote/release metadata.
-4. Enable the baseline runner only after all Q01–Q14 assertions are executable.
+2. Resolve license, citation authorship, and GitHub remote/release metadata.
+3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
 
 ## Audit command evidence
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 38 tests
+Ran 53 tests
 OK
 ```
 

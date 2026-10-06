@@ -24,9 +24,15 @@ and year-one AC-energy integration.
 
 The energy-only integration gate has passed Q01–Q05. Direct-mount year-one AC
 energy is 161,751.981 kWh and ventilated-mount energy is 166,904.081 kWh for the
-locked north orientation. These are gate-validation results, not a completed
-baseline. Lifecycle/decision modules remain skeletons and baseline execution is
-still intentionally disabled.
+locked north orientation.
+
+The subsequent degradation → availability → lifecycle-energy gate has also
+passed. It applies the locked linear degradation equation, expected-event
+availability approximation, disturbed-area and handled-scope burdens, one
+permanently replaced product per event, material replacement mass, and the
+common scheduled inverter years. These are gate-validation results, not a
+completed baseline. Cost, PSCF, Pareto, break-even, and sensitivity modules
+remain closed, and baseline execution is still intentionally disabled.
 
 ## Controlled sources
 
@@ -53,14 +59,16 @@ python -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python -m unittest discover -s tests -v
 .venv/bin/python analysis/run_energy_gate.py
+.venv/bin/python analysis/run_lifecycle_energy_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
-formal audit and energy-module tests.
+formal audit and integration-gate tests.
 
 The baseline, sensitivity, Pareto, and break-even entry points continue to fail
-closed until the downstream implementation gates pass. `run_energy_gate.py` is
-the only authorised numerical runner at this stage.
+closed until the downstream implementation gates pass. The authorised numerical
+runners at this stage are the energy gate and lifecycle-energy gate; neither is
+the formal baseline.
 
 ## Repository map
 
@@ -71,8 +79,8 @@ the only authorised numerical runner at this stage.
 - `analysis/`: guarded future entry points.
 - `tests/`: lock-integrity and static QA tests.
 - `docs/`: methodology, source, assumption-status, and scope notes.
-- `outputs/`: reserved locked output locations; the energy-gate QA artifact is
-  explicitly marked as non-baseline.
+- `outputs/`: reserved locked output locations; gate QA artifacts are explicitly
+  marked as non-baseline.
 
 ## Change control
 
