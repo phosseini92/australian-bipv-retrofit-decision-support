@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "failure_action": "hard_fail",
+  "assertions": [
+    {"id": "Q01", "text": "All eight variants use identical A_BIPV, Pdc0, PV technology and inverter configuration."},
+    {"id": "Q02", "text": "V01–V04 have identical E1_thermal; V05–V08 have identical E1_thermal within floating tolerance."},
+    {"id": "Q03", "text": "Reversibility changes no electrical variable in the central run."},
+    {"id": "Q04", "text": "Replacement scope changes no E1_thermal; it may change lifetime net energy only through expected downtime/affected area."},
+    {"id": "Q05", "text": "max(P_AC) ≤ 150 kW and all energy terms are non-negative."},
+    {"id": "Q06", "text": "LID is not applied again in lifetime degradation; availability loss is not embedded in L_sys."},
+    {"id": "Q07", "text": "Linear degradation is used, not compound degradation."},
+    {"id": "Q08", "text": "Scheduled inverter allowance is common across variants at a given T."},
+    {"id": "Q09", "text": "Adjacent assembly-level units are not counted as discarded/replaced material."},
+    {"id": "Q10", "text": "Central owner recovery credit = 0; Australian recycling cost already includes transport."},
+    {"id": "Q11", "text": "Institutional and contextual evidence values are identical across variants unless a future evidence source justifies otherwise."},
+    {"id": "Q12", "text": "Pareto dominance uses raw criterion values/directions, no weights and no normalization."},
+    {"id": "Q13", "text": "Every sensitivity run differs from central in exactly one numerical input, unless explicitly tagged STRUCTURAL TEST."},
+    {"id": "Q14", "text": "No NaN/Inf values in exported variant metrics or break-even outputs; non-existent roots are reported explicitly."}
+  ]
+}

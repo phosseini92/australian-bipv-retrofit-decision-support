@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "design": "full_factorial_2x2x2",
+  "factors": {
+    "mounting": ["direct", "ventilated"],
+    "connection": ["low_reversibility", "reversible_mechanical"],
+    "replacement_scope": ["assembly_level", "component_level"]
+  },
+  "variants": [
+    {"id": "V01", "short_code": "D-L-A", "mounting": "direct", "connection": "low_reversibility", "replacement_scope": "assembly_level"},
+    {"id": "V02", "short_code": "D-L-C", "mounting": "direct", "connection": "low_reversibility", "replacement_scope": "component_level"},
+    {"id": "V03", "short_code": "D-R-A", "mounting": "direct", "connection": "reversible_mechanical", "replacement_scope": "assembly_level"},
+    {"id": "V04", "short_code": "D-R-C", "mounting": "direct", "connection": "reversible_mechanical", "replacement_scope": "component_level"},
+    {"id": "V05", "short_code": "V-L-A", "mounting": "ventilated", "connection": "low_reversibility", "replacement_scope": "assembly_level"},
+    {"id": "V06", "short_code": "V-L-C", "mounting": "ventilated", "connection": "low_reversibility", "replacement_scope": "component_level"},
+    {"id": "V07", "short_code": "V-R-A", "mounting": "ventilated", "connection": "reversible_mechanical", "replacement_scope": "assembly_level"},
+    {"id": "V08", "short_code": "V-R-C", "mounting": "ventilated", "connection": "reversible_mechanical", "replacement_scope": "component_level"}
+  ]
+}

@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "australian-bipv-retrofit-decision-support"
+version = "0.1.0"
+description = "Controlled APSRC BIPV lifecycle decision-support implementation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = []
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.unittest]
+start-directory = "tests"

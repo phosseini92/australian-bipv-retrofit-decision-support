@@ -1,0 +1,19 @@
+parameter,symbol,unit,central,low,high,central_formula,low_formula,high_formula,source_id,evidence_type,applies_to,status,rationale,notes,source_sheet,source_row
+Location,LOC,-,"Melbourne, Victoria",,,,,,S02,Government,All variants,LOCKED,Common Australian climate context for the reference office study.,,A_Building_Geometry,5
+NCC climate zone,CZ,-,6,,,,,,S02,Government,All variants,LOCKED,Melbourne is listed in NCC climate zone 6 (mild temperate).,,A_Building_Geometry,6
+Building classification / archetype,TYPE,-,Class 5 commercial office reference archetype,,,,,,S01,Government,All variants,LOCKED,Reference office archetype replaces the unavailable project-specific building.,,A_Building_Geometry,7
+Storeys,N_fl,count,10,,,,,,S01,Government,All variants,LOCKED,Published Australian 10-storey office reference form.,,A_Building_Geometry,8
+Gross floor area,GFA,m²,10000,,,,,,S01,Government,All variants,LOCKED,Published reference form.,,A_Building_Geometry,9
+Net lettable area,NLA,m²,9000,,,,,,S01,Government,All variants,LOCKED,Published reference form; approximately 10% services/common areas.,,A_Building_Geometry,10
+Floor plate area,A_floor,m²,1000,,,=D9/D8,,,S01,Derived,All variants,DERIVED,GFA divided by number of storeys.,Formula-driven; do not hard-code.,A_Building_Geometry,11
+Plan ratio,L:W,-,1:1,,,,,,S01,Government,All variants,LOCKED,Published reference form.,,A_Building_Geometry,12
+Approx. plan side length,L_side,m,31.622776601683793,,,=SQRT(D11),,,S01,Derived,All variants,DERIVED,Square-plan side derived from floor plate area.,Assumes 1:1 plan ratio.,A_Building_Geometry,13
+Floor-to-floor height,h_ff,m,3.6,,,,,,S01,Government,All variants,LOCKED,Published office reference form.,,A_Building_Geometry,14
+Approx. building height,H,m,36,,,=D8*D14,,,S01,Derived,All variants,DERIVED,Storeys multiplied by floor-to-floor height.,,A_Building_Geometry,15
+Gross area of one façade orientation,"A_fac,gross",m²,1138.4199576606165,,,=D13*D15,,,S01,Derived,All variants,DERIVED,Plan side multiplied by building height.,Before deducting glazing/openings.,A_Building_Geometry,16
+External window-to-wall ratio,WWR,fraction,0.25,,,,,,S03,Peer-reviewed,All variants,LOCKED,Archetype-specific external WWR reported for Climate Zone 6.,Keep source-specific; do not generalise to all Melbourne offices.,A_Building_Geometry,17
+Approx. opaque/spandrel façade zone,A_opaque,m²,853.8149682454624,,,=D16*(1-D17),,,S03,Derived,All variants,DERIVED,Gross façade area multiplied by (1-WWR).,Candidate gross BIPV replacement zone.,A_Building_Geometry,18
+Primary orientation,ORI_main,-,North,,,,,,RD2,Modelling convention,Primary run,LOCKED,Primary orientation for the base comparison.,,A_Building_Geometry,19
+Orientation sensitivity,ORI_sens,-,West,,,,,,RD2,Modelling convention,Sensitivity run,LOCKED,Retained as a structural orientation sensitivity case.,,A_Building_Geometry,20
+BIPV application zone,ZONE,-,Opaque / spandrel façade replacement zone,,,,,,RD2,Modelling convention,All variants,LOCKED,Keeps the application boundary common across all 8 design variants.,,A_Building_Geometry,21
+Gross replaceable BIPV zone,"A_BIPV,gross",m²,853.8149682454624,,,=D18,,,S03;RD2,Derived,All variants,PROVISIONAL,Initially tied to the opaque/spandrel zone.,Active coverage/setbacks/module layout still TO VERIFY in Block B.,A_Building_Geometry,22

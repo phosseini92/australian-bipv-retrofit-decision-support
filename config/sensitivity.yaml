@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "execution_rule": "OFAT",
+  "numerical_inputs": [
+    "d", "SL_mod", "λ_mod", "DT_event", "N_handle,asm", "m_OM",
+    "C_BIPV", "p_vent", "p_rev", "r", "C_rec", "V_rec"
+  ],
+  "structural_runs": [
+    {"id": "west_orientation", "input": "ORI", "setting": "West façade"},
+    {"id": "equal_temperature_control", "input": "Tcase", "setting": "Equal-temperature control"},
+    {"id": "combined_circularity_criterion", "input": "CRIT", "setting": "One combined PSCF-informed criterion"},
+    {"id": "exclude_gap_from_denominator", "input": "GAP_RULE", "setting": "Exclude GAP item from dimension denominator"}
+  ],
+  "not_run_without_new_evidence": [
+    "whole_building_cooling_load_sensitivity",
+    "site_specific_external_shading",
+    "separate_transport_distance_tariff"
+  ],
+  "required_run_manifest_fields": [
+    "changed_parameter", "source_row", "value", "variant_set",
+    "code_version", "timestamp"
+  ]
+}

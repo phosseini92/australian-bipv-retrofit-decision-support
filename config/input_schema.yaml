@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "APSRC locked input row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "parameter", "symbol", "unit", "central", "low", "high",
+    "central_formula", "low_formula", "high_formula", "source_id",
+    "evidence_type", "applies_to", "status", "rationale", "notes",
+    "source_sheet", "source_row"
+  ],
+  "properties": {
+    "parameter": {"type": "string", "minLength": 1},
+    "symbol": {"type": "string", "minLength": 1},
+    "unit": {"type": "string", "minLength": 1},
+    "central": {"type": ["string", "number"]},
+    "low": {"type": ["string", "number"]},
+    "high": {"type": ["string", "number"]},
+    "central_formula": {"type": "string"},
+    "low_formula": {"type": "string"},
+    "high_formula": {"type": "string"},
+    "source_id": {"type": "string", "minLength": 1},
+    "evidence_type": {"type": "string", "minLength": 1},
+    "applies_to": {"type": "string", "minLength": 1},
+    "status": {"enum": ["LOCKED", "DERIVED", "PROVISIONAL", "STRUCTURAL TEST"]},
+    "rationale": {"type": "string", "minLength": 1},
+    "notes": {"type": "string"},
+    "source_sheet": {"type": "string", "minLength": 1},
+    "source_row": {"type": "integer", "minimum": 5}
+  }
+}

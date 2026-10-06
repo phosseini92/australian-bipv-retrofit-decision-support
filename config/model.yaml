@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "status": "LOCKED_SKELETON_ONLY",
+  "simulation_enabled": false,
+  "input_source": "data/inputs/source_manifest.yaml",
+  "invariants": {
+    "common_across_variants": [
+      "A_BIPV", "PVtech", "Pdc0", "INV", "d", "L_sys",
+      "I_DIM", "C_DIM"
+    ],
+    "connection_has_no_electrical_effect": true,
+    "replacement_scope_has_no_first_year_thermal_effect": true,
+    "mounting_does_not_change_pscf_evidence": true
+  },
+  "input_bindings": {
+    "weather": ["WX", "WX_method"],
+    "geometry": ["A_BIPV", "β", "γ_N", "γ_W", "ρ_g"],
+    "irradiance": ["IRR", "IAM", "n_IAM", "K_IAM", "L_IAM"],
+    "temperature": ["Tmodel", "T_direct", "T_vent"],
+    "electrical": ["Pdc0", "γ_Pmax", "L_sys", "Pac0", "η_inv,max"],
+    "lifecycle": ["T", "SL_mod", "SL_inv", "d", "λ_mod", "DT_event", "N_replace", "N_handle,cmp", "N_handle,asm"],
+    "cost": ["r", "C_BIPV", "p_vent", "p_rev", "m_OM", "p_invrep", "C_rec", "V_rec"],
+    "circularity": ["E_code", "E_gap", "M_REV", "M_REP", "M_MAINT", "M_DFD_DOC", "I_DIM", "C_DIM"]
+  },
+  "execution_order": [
+    "load_and_validate_locked_inputs_and_manifest",
+    "read_melbourne_tmyx_epw_and_build_timezone_aware_hourly_index",
+    "generate_v01_to_v08_from_fixed_factor_matrix",
+    "calculate_solar_position_and_plane_of_array_irradiance",
+    "apply_incidence_angle_modifiers_and_effective_irradiance",
+    "calculate_mounting_specific_cell_temperature",
+    "calculate_hourly_dc_power_losses_inverter_conversion_and_clipping",
+    "integrate_first_year_ac_electricity_before_failure_downtime",
+    "propagate_linear_degradation_downtime_and_intervention_burden",
+    "calculate_discounted_whole_life_cost_and_cost_per_lifetime_kwh",
+    "attach_pscf_informed_evidence_readiness_values",
+    "run_central_pareto_dominance",
+    "run_ofat_and_structural_robustness_tests",
+    "solve_break_even_thresholds",
+    "repeat_pareto_with_combined_circularity_and_gap_treatment",
+    "run_qa_then_export_tables_figures_and_manifest"
+  ],
+  "pareto": {
+    "weights": null,
+    "normalization": null,
+    "tolerance_use": "floating_point_noise_only",
+    "primary_criteria": [
+      {"field": "E_life", "direction": "maximize"},
+      {"field": "A_life", "direction": "maximize"},
+      {"field": "WLC", "direction": "minimize"},
+      {"field": "B_dist", "direction": "minimize"},
+      {"field": "M", "direction": "maximize"},
+      {"field": "I", "direction": "maximize"},
+      {"field": "C", "direction": "maximize"}
+    ],
+    "criterion_structure_test": {
+      "replace": ["M", "I", "C"],
+      "with": {"field": "CIRC", "direction": "maximize"}
+    }
+  },
+  "locked_output_filenames": [
+    "variant_central.csv",
+    "factor_contrasts.csv",
+    "sensitivity_runs.csv",
+    "pareto_primary.csv",
+    "pareto_robustness.csv",
+    "break_even.csv",
+    "run_manifest.json",
+    "fig_energy_cost_pareto.png",
+    "fig_dominance_stability.png",
+    "fig_break_even.png"
+  ]
+}

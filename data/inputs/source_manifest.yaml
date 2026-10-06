@@ -1,0 +1,58 @@
+{
+  "manifest_version": "0.1.0",
+  "generated_from_locked_sources": true,
+  "sources": [
+    {
+      "id": "research_design",
+      "filename": "APSRC_Research_Design_v2.0_LOCK.docx",
+      "sha256": "d7e505c5844708f27d65b69db26c5c9e078a4a1d839005bb9e1d0fef025a6811"
+    },
+    {
+      "id": "input_table",
+      "filename": "APSRC_Input_Table_v1.0_F_LOCK.xlsx",
+      "sha256": "9982df28318a674dba9168d9d51b96fbf1e8633d5e7ae6d33e99c5f39b1a3d25"
+    },
+    {
+      "id": "analysis_specification",
+      "filename": "APSRC_Analysis_Specification_v1.0_LOCK.docx",
+      "sha256": "3891f04ea97b49bb546a78e3537fb64fd3cfbe12360f4c8c6506e049d8028e67"
+    }
+  ],
+  "exports": [
+    {
+      "source_sheet": "A_Building_Geometry",
+      "file": "building.csv",
+      "sha256": "59b47113d97ebd441000f84c4c64d8b92c71a926cfda828afbc1c67bb0c46030"
+    },
+    {
+      "source_sheet": "B_PV_Electrical",
+      "file": "pv_electrical.csv",
+      "sha256": "f103135851c097c5224fa80370684fdfebfc5930ee37d344ff2b1487e6ae3e79"
+    },
+    {
+      "source_sheet": "C_ServiceLife_Maintenance",
+      "file": "lifecycle.csv",
+      "sha256": "7a7e253b99fc477b53dd608b2127c92c070315c29e12a8bde3e715f312c78bfa"
+    },
+    {
+      "source_sheet": "D_Lifecycle_Costs",
+      "file": "costs.csv",
+      "sha256": "c6c9d4e12530e7b29f3405c55eb5a6ec10266d12243b235b1c0d3f14487b0212"
+    },
+    {
+      "source_sheet": "E_PSCF_Evidence",
+      "file": "pscf_evidence.csv",
+      "sha256": "33216070034ee194d0520b7eb6a2aa3e9977fd14e2662560da129c3d094a897b"
+    },
+    {
+      "source_sheet": "F_Sensitivity_Ranges",
+      "file": "sensitivity.csv",
+      "sha256": "564b7177aaa1ca89e014503aeb90f67327c5e16a79cc51cabfff0e4319eb47a2"
+    },
+    {
+      "source_sheet": "Sources_Register",
+      "file": "sources.csv",
+      "sha256": "2fc73265875ff38f49c256883410e1199f57b272d5dd43f3f2f5d5a0a50c54ae"
+    }
+  ]
+}

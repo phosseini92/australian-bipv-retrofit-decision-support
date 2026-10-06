@@ -1,0 +1,6 @@
+cff-version: 1.2.0
+message: "Please cite the frozen release associated with the APSRC Proceedings analysis."
+title: "Australian BIPV Retrofit Decision Support"
+type: software
+version: 0.1.0
+abstract: "Controlled implementation scaffold for the locked APSRC BIPV lifecycle decision study."
