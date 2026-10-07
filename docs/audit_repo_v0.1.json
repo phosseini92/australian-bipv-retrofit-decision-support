@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-10-06",
-  "scope": "Repo v0.1 through PSCF-informed Evidence Gate",
-  "summary": {"PASS": 49, "MISMATCH": 5, "BLOCKER": 1, "total": 55},
+  "scope": "Repo v0.1 through central primary Pareto Gate",
+  "summary": {"PASS": 55, "MISMATCH": 5, "BLOCKER": 1, "total": 61},
   "disposition": {
     "computational_contract": "PASS",
     "repo_skeleton": "PASS",
@@ -9,6 +9,7 @@
     "lifecycle_energy": "PASS",
     "lifecycle_cost": "PASS",
     "pscf_informed_evidence": "PASS",
+    "central_primary_pareto": "PASS",
     "baseline_execution": "BLOCKED",
     "public_github_release": "HOLD"
   },
@@ -20,9 +21,9 @@
     {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"}
   ],
   "blockers": [
-    {"id": "B01", "item": "Pareto, sensitivity, and break-even modules remain skeletons"}
+    {"id": "B01", "item": "Criterion-structure/GAP Pareto robustness, sensitivity, and break-even remain incomplete"}
   ],
-  "test_evidence": {"tests_run": 79, "failures": 0, "errors": 0},
+  "test_evidence": {"tests_run": 86, "failures": 0, "errors": 0},
   "energy_gate": {
     "status": "PASS",
     "weather_sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
@@ -41,6 +42,16 @@
     },
     "gap_items": ["M_DFD_DOC", "I_TAKE"],
     "explicit_zero_constraint_retained": "C_LOG"
+  },
+  "pareto_gate": {
+    "status": "PASS",
+    "assertions": ["D01", "D02", "D03", "D04", "Q12", "Q14"],
+    "criteria": ["E_life:max", "A_life:max", "WLC:min", "B_dist:min", "M:max", "I:max", "C:max"],
+    "non_dominated_set": ["V02", "V04", "V06", "V08"],
+    "dominance_edges": 6,
+    "weights": null,
+    "normalization": null,
+    "sensitivity_executed": false
   },
   "baseline_executed": false
 }

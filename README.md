@@ -45,9 +45,14 @@ carried into mechanistic, institutional, and contextual dimensions without
 presenting the study-specific 0/0.5/1 coding as a native PSCF score. The
 structural GAP run excludes only items explicitly labelled `GAP`; documented
 constraints remain zero. Institutional and contextual values are common across
-all variants, and mounting creates no evidence-readiness difference. Pareto,
-break-even, and sensitivity modules remain closed, and baseline execution is
-still intentionally disabled.
+all variants, and mounting creates no evidence-readiness difference.
+
+The central primary Pareto Gate has also passed. It evaluates the seven locked
+raw criteria in their stated directions, without weights or normalization, and
+uses only an eight-ULP tolerance to suppress floating-point noise. The central
+non-dominated set is V02, V04, V06, and V08. This gate does not execute the
+combined-circularity/GAP structural runs, numerical sensitivity, break-even, or
+the formal baseline.
 
 ## Controlled sources
 
@@ -77,6 +82,7 @@ python -m venv .venv
 .venv/bin/python analysis/run_lifecycle_energy_gate.py
 .venv/bin/python analysis/run_cost_gate.py
 .venv/bin/python analysis/run_evidence_gate.py
+.venv/bin/python analysis/run_pareto_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
@@ -84,8 +90,8 @@ formal audit and integration-gate tests.
 
 The baseline, sensitivity, Pareto, and break-even entry points continue to fail
 closed until the downstream implementation gates pass. The authorised numerical
-runners at this stage are the energy, lifecycle-energy, cost, and Evidence
-Gates; none is the formal baseline.
+runners at this stage are the energy, lifecycle-energy, cost, Evidence, and
+central primary Pareto Gates; none is the formal baseline.
 
 ## Repository map
 

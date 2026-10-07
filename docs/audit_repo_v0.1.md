@@ -1,4 +1,4 @@
-# Formal Audit — Repo v0.1 through Evidence Gate
+# Formal Audit — Repo v0.1 through Central Primary Pareto Gate
 
 Audit date: 2026-10-07
 Audit scope: repository structure, controlled inputs, locked variant/design
@@ -23,11 +23,13 @@ means execution cannot safely proceed.
   inverter, EoL, discounting, WLC, and cost-intensity equations pass.
 - PSCF-informed Evidence Gate: **PASS** — item-level evidence coding, central
   dimensions, GAP-excluded robustness, and Q11/Q14 pass.
+- Central primary Pareto Gate: **PASS** — raw seven-criterion dominance,
+  pairwise QA, and Q12/Q14 pass without weights or normalization.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **49 PASS / 5 MISMATCH / 1 BLOCKER** across 55 checks.
+Summary: **55 PASS / 5 MISMATCH / 1 BLOCKER** across 61 checks.
 
 ## Controlled-source evidence
 
@@ -56,7 +58,7 @@ recomputed hashes of the three supplied files.
 | R05 | PASS | Mandatory execution order | All 16 locked steps are present in the specified order. |
 | R06 | PASS | Sensitivity contract | OFAT and structural-test cases are registered separately; central/low/high values remain sourced from the locked snapshot. |
 | R07 | PASS | Q01–Q14 registration | All 14 assertion IDs are present with hard-fail policy. |
-| R08 | PASS | Fail-closed analysis entry points | Baseline, sensitivity, break-even, and Pareto runners exit non-zero while execution gates remain open. |
+| R08 | PASS | Fail-closed final analysis entry points | Baseline, sensitivity, break-even, and final Pareto runners exit non-zero while downstream gates remain open. Separate controlled gate runners do not emit the locked final baseline outputs. |
 | R09 | PASS | Locked output contract | All seven CSV/JSON tables and three figure filenames are registered; no simulation output is present. |
 | E01 | PASS | Locked EPW identity and validation code | Loader enforces exact filename, SHA-256, byte size, station metadata, 8,760 unique rows, source-year map, non-leap calendar positions, and required weather fields. Negative irradiance is clipped only as specified. |
 | E02 | PASS | Controlled EPW presence and provenance | The local controlled EPW matches SHA-256 `8b58f95…fcb1e`. Mixed historical years are normalised under approved `CC-001`; all original timestamps and row order are retained for audit. |
@@ -93,13 +95,19 @@ recomputed hashes of the three supplied files.
 | P04 | PASS | GAP structural treatment | `M_DFD_DOC` and `I_TAKE` are the only excluded GAP items. Dimensions are recomputed from item labels; `C_LOG` remains an explicit zero constraint in the contextual denominator. |
 | P05 | PASS | Factor isolation | Institutional and contextual dimensions are identical across V01–V08; direct versus ventilated mounting produces no evidence-readiness difference. Q11 passes. |
 | P06 | PASS | Evidence numerical integrity | Central and GAP-excluded M/I/C/combined values are finite and bounded in [0,1]. The combined structural criterion is an unweighted arithmetic mean. Q14 passes. |
+| PA01 | PASS | Locked primary vector | `E_life`, `A_life`, `WLC`, `B_dist`, `M`, `I`, and `C` are evaluated in their locked directions. Institutional and contextual values remain constant and are not fabricated. |
+| PA02 | PASS | Dominance rule | A variant must be no worse on every raw criterion and strictly better on at least one. The only tolerance is eight machine ULPs for floating-point noise. |
+| PA03 | PASS | No preference transformation | No weighting, normalization, composite score, or practical-equivalence band is used. Q12 passes. |
+| PA04 | PASS | Dominance graph | Six directed dominance edges are reproduced: V02→V01/V03, V04→V03, V06→V05/V07, and V08→V07. The graph is irreflexive and asymmetric. |
+| PA05 | PASS | Central non-dominated set | The primary central set is V02, V04, V06, and V08. Each remaining assembly-level variant has at least one valid incoming dominance edge. |
+| PA06 | PASS | Scope isolation | Combined-circularity, GAP-treatment Pareto, OFAT sensitivity, break-even, final CSV outputs, and figures were not executed. All central raw metrics are finite; Q14 passes. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 79 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence contracts, item-level GAP handling, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, and all implemented gate equations. |
+| V02 | PASS | Automated validation | 86 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto contracts, item-level GAP handling, raw dominance behaviour, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | Pareto, sensitivity, and break-even modules remain skeletons. The baseline runner correctly stays disabled until those gates are implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, and Evidence Gates were executed. No formal baseline, sensitivity, Pareto, break-even table, or figure was generated. |
+| B01 | BLOCKER | Full baseline execution | Criterion-structure/GAP Pareto robustness, sensitivity, and break-even remain incomplete. The baseline runner correctly stays disabled until those gates are implemented and tested. |
+| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, and central primary Pareto Gates were executed. No formal baseline, sensitivity, break-even table, locked final Pareto CSV, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -121,7 +129,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete Pareto, sensitivity, and break-even modules.
+1. Complete criterion-structure/GAP Pareto robustness, sensitivity, and break-even modules.
 2. Resolve license, citation authorship, and GitHub remote/release metadata.
 3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
 
@@ -129,7 +137,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 79 tests
+Ran 86 tests
 OK
 ```
 

@@ -56,5 +56,14 @@ PSCF score. The central run retains documented evidence gaps as zero and flags
 them; the structural robustness run recomputes each affected dimension after
 excluding only GAP-labelled items. Explicit documented constraints remain zero
 and stay in their denominators. The combined structural criterion is the
-unweighted arithmetic mean of M, I, and C, exactly as locked. Pareto,
-sensitivity, break-even, and full baseline execution remain disabled.
+unweighted arithmetic mean of M, I, and C, exactly as locked.
+
+The central primary Pareto Gate uses raw `E_life`, `A_life`, `WLC`, `B_dist`,
+`M`, `I`, and `C` values with their locked maximise/minimise directions. A
+variant dominates another only when it is no worse on every criterion and
+strictly better on at least one. No weights or normalization are applied. The
+implementation tolerance is limited to eight machine ULPs, solely to suppress
+floating-point noise. Institutional and contextual criteria remain in the
+vector and are reported as constant; no artificial differences are introduced.
+Criterion-structure/GAP robustness, numerical sensitivity, break-even, and the
+formal baseline remain disabled.
