@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "status": "NUMERICAL_OFAT_GATE_PASSED_BASELINE_DISABLED",
+  "status": "BREAK_EVEN_COMPUTATION_COMPLETE_LOCK_CLARIFICATION_REQUIRED",
   "simulation_enabled": false,
   "module_status": {
     "weather": "controlled_epw_validated",
@@ -16,7 +16,7 @@
     "circularity": "item_level_evidence_gate_passed",
     "pareto": "primary_and_structural_robustness_gates_passed",
     "sensitivity": "numerical_ofat_gate_passed",
-    "break_even": "skeleton_only"
+    "break_even": "implemented_blocked_by_locked_spec_clarification"
   },
   "input_source": "data/inputs/source_manifest.yaml",
   "invariants": {

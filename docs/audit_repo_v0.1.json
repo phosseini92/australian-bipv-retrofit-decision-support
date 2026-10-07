@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-10-07",
-  "scope": "Repo v0.1 through Numerical OFAT Sensitivity Gate",
-  "summary": {"PASS": 67, "MISMATCH": 6, "BLOCKER": 1, "total": 74},
+  "scope": "Repo v0.1 through Break-even Computation Gate",
+  "summary": {"PASS": 75, "MISMATCH": 8, "BLOCKER": 1, "total": 84},
   "disposition": {
     "computational_contract": "PASS",
     "repo_skeleton": "PASS",
@@ -12,6 +12,8 @@
     "central_primary_pareto": "PASS",
     "pareto_structural_robustness": "PASS",
     "numerical_ofat_sensitivity": "PASS",
+    "break_even_computation": "PASS",
+    "break_even_gate_approval": "BLOCKED_LOCKED_SPEC_CLARIFICATION",
     "baseline_execution": "BLOCKED",
     "public_github_release": "HOLD"
   },
@@ -21,12 +23,14 @@
     {"id": "G02", "item": "Citation author/release metadata is incomplete"},
     {"id": "G03", "item": "GitHub remote and release/tag are absent"},
     {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"},
-    {"id": "NS06", "item": "V_rec low equals its central value of zero; the endpoint is retained but excluded from valid changed-input runs"}
+    {"id": "NS06", "item": "V_rec low equals its central value of zero; the endpoint is retained but excluded from valid changed-input runs"},
+    {"id": "BE-M01", "item": "Explicit BE_access omits premium-driven O&M that is included by the locked WLC equation"},
+    {"id": "BE-M03", "item": "Research Design names an intervention-frequency threshold not defined by the Analysis Specification or Input Table"}
   ],
   "blockers": [
-    {"id": "B01", "item": "Break-even remains incomplete"}
+    {"id": "B01", "item": "Primary BE_r requires a selected A/B pair not designated in the locked sources; access-equation clarification is also required"}
   ],
-  "test_evidence": {"tests_run": 105, "failures": 0, "errors": 0},
+  "test_evidence": {"tests_run": 117, "failures": 0, "errors": 0},
   "energy_gate": {
     "status": "PASS",
     "weather_sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
@@ -93,6 +97,24 @@
       "V08": 23
     },
     "break_even_executed": false
+  },
+  "break_even_computation_gate": {
+    "status": "BLOCKED_LOCKED_SPEC_CLARIFICATION",
+    "computational_implementation": "PASS",
+    "assertions": ["BE01", "BE02", "BE03", "BE04", "BE05", "BE06", "BE07", "Q14"],
+    "maximum_premium_central_no_savings_fraction": 0.0,
+    "access_saving_locked_formula_aud_per_event": 14017.27206310166,
+    "access_saving_full_wlc_diagnostic_aud_per_event": 14886.976594658823,
+    "locked_access_formula_wlc_residual_aud": 1708.8980865952362,
+    "service_life_all_four_pairs": "NO_BREAK_EVEN_LE_50_YEARS",
+    "incremental_owner_recovery_threshold_aud_per_tonne": 18794.47552573408,
+    "locked_upper_owner_recovery_aud_per_tonne": 1130.0,
+    "discount_rate_primary_status": "LOCKED_PAIRWISE_COMPARISON_NOT_SPECIFIED",
+    "discount_rate_candidate_status_counts": {
+      "NO_SIGN_CHANGE_WITHIN_BOUND": 8,
+      "IDENTICALLY_EQUAL_WITHIN_TOLERANCE": 4
+    },
+    "final_break_even_csv_executed": false
   },
   "baseline_executed": false
 }

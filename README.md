@@ -68,6 +68,19 @@ non-dominated set becomes V04/V08 (Jaccard 0.5). Pareto-inclusion frequencies
 are robustness summaries, not probabilities. Break-even and the formal
 baseline remain disabled.
 
+The computable portion of the Break-even Gate is now implemented and passes its
+formula/root-status QA, but final Gate approval is blocked by locked-source
+clarification rather than by a software error. The explicit Section 11.2 access
+equation gives A$14,017.27/event, whereas full WLC equality gives
+A$14,886.98/event because WLC also makes O&M proportional to premium-inclusive
+initial cost. No ventilated/direct matched pair reaches cost-intensity parity
+within the locked integer search of 10–50 years. The incremental recovery
+threshold is A$18,794.48/t, about 16.63 times the locked A$1,130/t upper value.
+The sources also do not designate the A/B pair required for the primary
+discount-rate threshold; code therefore reports all one-factor candidates but
+does not select one. These thresholds answer “what would have to be true?” and
+are not claims that such market values exist.
+
 ## Controlled sources
 
 The repository snapshot is derived only from:
@@ -99,16 +112,17 @@ python -m venv .venv
 .venv/bin/python analysis/run_pareto_gate.py
 .venv/bin/python analysis/run_pareto_robustness_gate.py
 .venv/bin/python analysis/run_numerical_ofat_gate.py
+.venv/bin/python analysis/run_break_even_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
 formal audit and integration-gate tests.
 
-The baseline, final sensitivity export, final Pareto export, and break-even
-entry points continue to fail closed until the downstream implementation gates
-pass. The authorised numerical runners at this stage are the energy,
+The baseline, final sensitivity export, final Pareto export, and final
+break-even entry points continue to fail closed until the locked-source issues
+are resolved. The authorised controlled runners at this stage are the energy,
 lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness,
-and Numerical OFAT Gates; none is the formal baseline.
+Numerical OFAT, and Break-even computation Gates; none is the formal baseline.
 
 ## Repository map
 

@@ -25,3 +25,10 @@ central accounting and reserves them for break-even/stress analysis. These
 bookkeeping zeros must not be described as evidence that access or removal is
 costless. Likewise, the reported transport component is contained within the
 all-in recycling fee and is never added to it.
+
+The Break-even computation does not resolve inconsistencies among controlled
+sources by choosing a preferred equation or comparison. It reports the explicit
+Section 11.2 access equation beside a full-WLC reconciliation diagnostic,
+leaves the primary discount-rate pair unselected, and does not invent the
+intervention-frequency output omitted from the Analysis Specification/Input
+Table. These are controlled-source clarification items, not modelling defaults.

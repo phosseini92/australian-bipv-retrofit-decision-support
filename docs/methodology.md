@@ -84,4 +84,22 @@ changed-input runs because locked `V_rec` low equals its central value of zero.
 That duplicate endpoint is retained in the audit trail but excluded from the
 Pareto-inclusion denominator. Inclusion frequency and Jaccard similarity are
 reported only as deterministic robustness summaries, never probabilities.
-Break-even and the formal baseline remain disabled.
+
+Break-even calculations implement the five named output families without
+inventing unsupported tariffs. Matched reversible/low pairs are used for
+premium, access, and incremental-recovery thresholds; matched
+ventilated/direct pairs are searched at every integer horizon from 10 through
+50 years, with scheduled inverter replacement at each locked 15-year interval.
+Bounded discount-rate diagnostics cover 0–15% real and report missing or
+non-unique roots with explicit status strings rather than NaN/Inf.
+
+Two locked-source issues prevent final Gate approval. First, the explicit
+Section 11.2 access formula includes only the initial reversibility premium,
+while the WLC equation makes O&M proportional to premium-inclusive `C0`; both
+values are therefore reported, with the WLC residual exposed. Second, Section
+11.5 requires a “selected pairwise comparison” but does not identify A and B.
+All matched one-factor candidates are evaluated diagnostically, but none is
+promoted to the primary `BE_r` result. Research Design v2.0 also names an
+intervention-frequency threshold for which the Analysis Specification and
+Input Table provide no output equation or scenario. The formal baseline stays
+disabled pending controlled-source clarification.

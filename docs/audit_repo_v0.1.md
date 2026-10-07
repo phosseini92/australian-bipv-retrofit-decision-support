@@ -1,9 +1,10 @@
-# Formal Audit — Repo v0.1 through Numerical OFAT Sensitivity Gate
+# Formal Audit — Repo v0.1 through Break-even Computation Gate
 
 Audit date: 2026-10-07
 Audit scope: repository structure, controlled inputs, locked variant/design
 contract, QA registration, energy, lifecycle-energy, cost, PSCF-informed
-evidence, Pareto, and numerical OFAT implementation, and readiness to run.
+evidence, Pareto, numerical OFAT, and break-even implementation, and readiness
+to run.
 Decision rule: `PASS` means evidence satisfies the locked contract;
 `MISMATCH` means a non-scientific repository/release gap exists; `BLOCKER`
 means execution cannot safely proceed.
@@ -31,11 +32,17 @@ means execution cannot safely proceed.
   evaluations execute; 23 valid changed-input runs pass Q13 and stability QA.
   The locked `V_rec` low/central duplicate is disclosed as a mismatch and is
   excluded from the valid-run denominator.
+- Break-even computational implementation: **PASS** — premium, access,
+  service-life, recovery, and bounded discount-rate computations pass formula,
+  pairing, finite-value, and explicit-non-root QA.
+- Break-even Gate approval: **BLOCKED** — the locked sources must clarify the
+  access-equation/WLC inconsistency and designate the primary discount-rate
+  pair. No research choice was inserted in code.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **67 PASS / 6 MISMATCH / 1 BLOCKER** across 74 checks.
+Summary: **75 PASS / 8 MISMATCH / 1 BLOCKER** across 84 checks.
 
 ## Controlled-source evidence
 
@@ -120,13 +127,23 @@ recomputed hashes of the three supplied files.
 | NS05 | PASS | Pareto stability result | Central V02/V04/V06/V08 is retained in 22/23 valid runs. Only `p_rev=0` changes the set to V04/V08, with Jaccard 0.5. Inclusion counts are V04=23, V08=23, V02=22, V06=22, and zero for V01/V03/V05/V07. Frequencies are robustness summaries, not probabilities. |
 | NS06 | MISMATCH | Duplicate locked endpoint | `V_rec` low and central are both zero in the controlled input table. The low endpoint is executed and preserved in provenance but cannot satisfy Q13 as a changed-input run, so it is explicitly flagged `locked_endpoint_equals_central` and excluded from the 23-run denominator. No value is invented to force a change. |
 | NS07 | PASS | Sensitivity-gate scope | This gate emits no structural sensitivity case, break-even result, locked final baseline CSV, figure, or formal baseline. The guarded final runners remain closed. |
+| BE01 | PASS | Break-even comparison contract | All four locked reversible/low pairs and all four locked ventilated/direct pairs execute. The discount diagnostic covers all 12 matched one-factor contrasts without choosing a preferred pair. |
+| BE02 | PASS | Maximum premium | With no centrally asserted downstream monetary saving, the explicit `p_rev,max = PV(savings)/(A_BIPV×C_BIPV)` threshold is zero for all four connection pairs. This is a scenario result, not a claim of no non-monetised benefit. |
+| BE03 | PASS | Access threshold calculations | The explicit Section 11.2 equation yields A$14,017.27/event. A separately labelled full-WLC reconciliation yields A$14,886.98/event and zero residual. Both are retained; neither silently replaces the other. |
+| BE04 | PASS | Service-life threshold | Every matched ventilated/direct contrast searches each integer T from 10 to 50 with locked 15-year inverter intervals. None reaches `WLC_vent/E_vent ≤ WLC_direct/E_direct`; every non-root is explicit. |
+| BE05 | PASS | Recovery-value threshold | Full-WLC equality requires an incremental owner recovery credit of A$18,794.48/t for each matched reversible/low pair under the specified zero-other-savings scenario. This is 16.63× the locked A$1,130/t upper value and is not presented as a market observation. |
+| BE06 | PASS | Discount-rate diagnostics | Over 0–15% real, eight connection/mounting contrasts have no sign change and four replacement-scope WLC contrasts are tied at all tested rates. No candidate is silently promoted to the unspecified primary `BE_r` comparison. |
+| BE07 | PASS | Numerical/root integrity | All computed thresholds, bounds, residuals, and endpoint deltas are finite. Non-existent and non-unique roots use explicit status plus null value; Q14 passes. |
+| BE08 | PASS | Break-even scope isolation | The controlled runner emits audit evidence only. It does not create the locked final `break_even.csv`, a break-even figure, or the formal baseline while source clarification is outstanding. |
+| BE-M01 | MISMATCH | Access equation versus WLC | Section 11.2 uses only the initial premium in the access-threshold numerator, but Section 6 defines O&M as `m_OM×C0` with premium included in `C0`. The explicit threshold leaves a A$1,708.90 WLC residual. A controlled-source choice is required before one value is article-primary. |
+| BE-M03 | MISMATCH | Intervention-frequency output | Research Design v2.0 names an intervention-frequency threshold, while Analysis Specification v1.0 and Input Table v1.0 F define neither a corresponding primary output equation nor a scenario. No threshold was invented. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 105 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto/sensitivity contracts, item-level GAP handling, raw and structural dominance behaviour, OFAT isolation/derivations, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
+| V02 | PASS | Automated validation | 117 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto/sensitivity/break-even contracts, item-level GAP handling, raw and structural dominance behaviour, OFAT isolation/derivations, root and non-root handling, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | Break-even remains incomplete. The baseline runner correctly stays disabled until that gate is implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness, and Numerical OFAT Gates were executed. No formal baseline, break-even table, locked final Pareto CSV, or figure was generated. |
+| B01 | BLOCKER | Locked Break-even approval and full baseline | Section 11.5 requires a selected A/B pair for `BE_r`, but none is designated in the three locked sources. Together with BE-M01, this requires a controlled-source clarification before final `break_even.csv` and baseline execution. |
+| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness, Numerical OFAT, and Break-even computation Gates were executed. No formal baseline, locked final break-even/Pareto CSV, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -148,15 +165,20 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete the locked Break-even Gate.
-2. Resolve license, citation authorship, and GitHub remote/release metadata.
-3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
+1. Issue a controlled-source clarification choosing whether article-primary
+   `BE_access` follows the explicit Section 11.2 equation or full-WLC equality.
+2. Designate the A/B pair and scenario for primary `BE_r`.
+3. Reconcile or explicitly remove the Research Design intervention-frequency
+   threshold requirement.
+4. Re-run the Break-even Gate, then enable the baseline only after the blocker
+   is closed.
+5. Resolve license, citation authorship, and GitHub remote/release metadata.
 
 ## Audit command evidence
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 105 tests
+Ran 117 tests
 OK
 ```
 
