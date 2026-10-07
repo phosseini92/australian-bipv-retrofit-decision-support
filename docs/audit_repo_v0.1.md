@@ -1,9 +1,9 @@
-# Formal Audit — Repo v0.1 through Pareto Structural Robustness Gate
+# Formal Audit — Repo v0.1 through Numerical OFAT Sensitivity Gate
 
 Audit date: 2026-10-07
 Audit scope: repository structure, controlled inputs, locked variant/design
-contract, QA registration, energy, lifecycle-energy, cost, and PSCF-informed
-evidence implementation, and readiness to run.
+contract, QA registration, energy, lifecycle-energy, cost, PSCF-informed
+evidence, Pareto, and numerical OFAT implementation, and readiness to run.
 Decision rule: `PASS` means evidence satisfies the locked contract;
 `MISMATCH` means a non-scientific repository/release gap exists; `BLOCKER`
 means execution cannot safely proceed.
@@ -27,11 +27,15 @@ means execution cannot safely proceed.
   pairwise QA, and Q12/Q14 pass without weights or normalization.
 - Pareto structural robustness gate: **PASS** — primary/combined-CIRC ×
   GAP-zero/excluded set comparison and robustness QA pass.
+- Numerical OFAT Sensitivity Gate: **PASS** — all 24 registered endpoint
+  evaluations execute; 23 valid changed-input runs pass Q13 and stability QA.
+  The locked `V_rec` low/central duplicate is disclosed as a mismatch and is
+  excluded from the valid-run denominator.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **61 PASS / 5 MISMATCH / 1 BLOCKER** across 67 checks.
+Summary: **67 PASS / 6 MISMATCH / 1 BLOCKER** across 74 checks.
 
 ## Controlled-source evidence
 
@@ -109,13 +113,20 @@ recomputed hashes of the three supplied files.
 | PR04 | PASS | Set stability | All four scenarios retain V02/V04/V06/V08. Every Jaccard similarity to central-primary is 1.0. |
 | PR05 | PASS | Graph stability | All scenarios retain the same six dominance edges; no edge is created or removed by criterion representation or GAP treatment. |
 | PR06 | PASS | Robustness scope | Q12 and Q14 pass. No numerical OFAT sensitivity, inclusion frequency, break-even, final baseline output, or figure is produced. |
+| NS01 | PASS | Numerical OFAT registration | Two low/high endpoints execute for each of the 12 locked numerical inputs, in the registered order, for 24 endpoint evaluations. Numerical and structural cases remain separated. |
+| NS02 | PASS | Dependent-value propagation | Changes to service life, failure rate, handled assembly scope, mounting cost, O&M, premiums, discounting, recycling, and recovery recompute all affected lifecycle/cost quantities before dominance analysis. Service-life cases use T=25/35 without artificial module replacement and retain the locked inverter-year rule. |
+| NS03 | PASS | One-factor isolation | All 23 valid changed-input runs differ from central in exactly one registered numerical input. Q13 hard-fails any unregistered or multi-input change. |
+| NS04 | PASS | Run manifests and numerical integrity | Every endpoint records parameter, workbook sheet/row, value, V01–V08 set, code version, timestamp, validity, and exclusion reason. All 192 variant-endpoint metric rows and stability values are finite; Q14 passes. |
+| NS05 | PASS | Pareto stability result | Central V02/V04/V06/V08 is retained in 22/23 valid runs. Only `p_rev=0` changes the set to V04/V08, with Jaccard 0.5. Inclusion counts are V04=23, V08=23, V02=22, V06=22, and zero for V01/V03/V05/V07. Frequencies are robustness summaries, not probabilities. |
+| NS06 | MISMATCH | Duplicate locked endpoint | `V_rec` low and central are both zero in the controlled input table. The low endpoint is executed and preserved in provenance but cannot satisfy Q13 as a changed-input run, so it is explicitly flagged `locked_endpoint_equals_central` and excluded from the 23-run denominator. No value is invented to force a change. |
+| NS07 | PASS | Sensitivity-gate scope | This gate emits no structural sensitivity case, break-even result, locked final baseline CSV, figure, or formal baseline. The guarded final runners remain closed. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 91 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto contracts, item-level GAP handling, raw and structural dominance behaviour, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
+| V02 | PASS | Automated validation | 105 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto/sensitivity contracts, item-level GAP handling, raw and structural dominance behaviour, OFAT isolation/derivations, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | Numerical OFAT sensitivity and break-even remain incomplete. The baseline runner correctly stays disabled until those gates are implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, central primary Pareto, and Pareto robustness Gates were executed. No formal baseline, numerical sensitivity table, break-even table, locked final Pareto CSV, or figure was generated. |
+| B01 | BLOCKER | Full baseline execution | Break-even remains incomplete. The baseline runner correctly stays disabled until that gate is implemented and tested. |
+| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness, and Numerical OFAT Gates were executed. No formal baseline, break-even table, locked final Pareto CSV, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -137,7 +148,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete numerical OFAT sensitivity and break-even modules.
+1. Complete the locked Break-even Gate.
 2. Resolve license, citation authorship, and GitHub remote/release metadata.
 3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
 
@@ -145,7 +156,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 91 tests
+Ran 105 tests
 OK
 ```
 

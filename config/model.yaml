@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "status": "PARETO_ROBUSTNESS_GATE_PASSED_BASELINE_DISABLED",
+  "status": "NUMERICAL_OFAT_GATE_PASSED_BASELINE_DISABLED",
   "simulation_enabled": false,
   "module_status": {
     "weather": "controlled_epw_validated",
@@ -15,7 +15,8 @@
     "lifecycle_cost": "integration_gate_passed",
     "circularity": "item_level_evidence_gate_passed",
     "pareto": "primary_and_structural_robustness_gates_passed",
-    "break_even_sensitivity": "skeleton_only"
+    "sensitivity": "numerical_ofat_gate_passed",
+    "break_even": "skeleton_only"
   },
   "input_source": "data/inputs/source_manifest.yaml",
   "invariants": {

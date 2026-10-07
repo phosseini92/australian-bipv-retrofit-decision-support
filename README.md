@@ -55,8 +55,18 @@ non-dominated set is V02, V04, V06, and V08.
 The locked criterion-structure and evidence-gap robustness gate has passed as
 well. The full primary/combined-CIRC × GAP-zero/excluded matrix retains the
 same non-dominated set and the same six dominance edges in all four scenarios;
-each scenario has Jaccard similarity 1.0 to the central-primary set. Numerical
-OFAT sensitivity, break-even, and the formal baseline remain disabled.
+each scenario has Jaccard similarity 1.0 to the central-primary set.
+
+The Numerical OFAT Sensitivity Gate has now passed. All 24 locked low/high
+endpoint evaluations were executed, with complete run manifests and eight
+variant rows per endpoint. Twenty-three are valid changed-input OFAT runs;
+`V_rec` low equals its locked central value of zero, so that endpoint is
+transparently reported but excluded from the robustness denominator. The
+central set is unchanged in 22/23 valid runs. At `p_rev=0`, V02 and V06 lose
+their cost disadvantage relative to their reversible counterparts and the
+non-dominated set becomes V04/V08 (Jaccard 0.5). Pareto-inclusion frequencies
+are robustness summaries, not probabilities. Break-even and the formal
+baseline remain disabled.
 
 ## Controlled sources
 
@@ -88,15 +98,17 @@ python -m venv .venv
 .venv/bin/python analysis/run_evidence_gate.py
 .venv/bin/python analysis/run_pareto_gate.py
 .venv/bin/python analysis/run_pareto_robustness_gate.py
+.venv/bin/python analysis/run_numerical_ofat_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
 formal audit and integration-gate tests.
 
-The baseline, sensitivity, Pareto, and break-even entry points continue to fail
-closed until the downstream implementation gates pass. The authorised numerical
-runners at this stage are the energy, lifecycle-energy, cost, Evidence, central
-primary Pareto, and Pareto robustness Gates; none is the formal baseline.
+The baseline, final sensitivity export, final Pareto export, and break-even
+entry points continue to fail closed until the downstream implementation gates
+pass. The authorised numerical runners at this stage are the energy,
+lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness,
+and Numerical OFAT Gates; none is the formal baseline.
 
 ## Repository map
 

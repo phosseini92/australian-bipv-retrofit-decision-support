@@ -71,5 +71,17 @@ three separate M/I/C dimensions versus the combined CIRC criterion, each under
 central GAP-as-zero and GAP-excluded dimension arithmetic. CIRC is recomputed
 from item-derived M/I/C values and introduces no weights. Scenario sets are
 compared to central-primary with Jaccard similarity, treated as a robustness
-summary rather than a probability. Numerical OFAT sensitivity, break-even, and
-the formal baseline remain disabled.
+summary rather than a probability.
+
+Numerical sensitivity follows the registered one-factor-at-a-time contract:
+each valid run substitutes exactly one locked low or high endpoint and
+recomputes every dependent lifecycle and cost quantity before repeating the raw
+primary Pareto analysis. Module-service-life endpoints change the evaluation
+horizon to 25 or 35 years without creating an artificial module replacement;
+the corresponding inverter schedule remains year 15 for T=25 and years 15 and
+30 for T=35. The 24 registered endpoint evaluations contain 23 valid
+changed-input runs because locked `V_rec` low equals its central value of zero.
+That duplicate endpoint is retained in the audit trail but excluded from the
+Pareto-inclusion denominator. Inclusion frequency and Jaccard similarity are
+reported only as deterministic robustness summaries, never probabilities.
+Break-even and the formal baseline remain disabled.

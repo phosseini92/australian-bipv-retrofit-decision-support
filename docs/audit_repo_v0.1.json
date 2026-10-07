@@ -1,7 +1,7 @@
 {
-  "audit_date": "2026-10-06",
-  "scope": "Repo v0.1 through Pareto structural robustness gate",
-  "summary": {"PASS": 61, "MISMATCH": 5, "BLOCKER": 1, "total": 67},
+  "audit_date": "2026-10-07",
+  "scope": "Repo v0.1 through Numerical OFAT Sensitivity Gate",
+  "summary": {"PASS": 67, "MISMATCH": 6, "BLOCKER": 1, "total": 74},
   "disposition": {
     "computational_contract": "PASS",
     "repo_skeleton": "PASS",
@@ -11,6 +11,7 @@
     "pscf_informed_evidence": "PASS",
     "central_primary_pareto": "PASS",
     "pareto_structural_robustness": "PASS",
+    "numerical_ofat_sensitivity": "PASS",
     "baseline_execution": "BLOCKED",
     "public_github_release": "HOLD"
   },
@@ -19,12 +20,13 @@
     {"id": "G01", "item": "Public license is not selected"},
     {"id": "G02", "item": "Citation author/release metadata is incomplete"},
     {"id": "G03", "item": "GitHub remote and release/tag are absent"},
-    {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"}
+    {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"},
+    {"id": "NS06", "item": "V_rec low equals its central value of zero; the endpoint is retained but excluded from valid changed-input runs"}
   ],
   "blockers": [
-    {"id": "B01", "item": "Numerical OFAT sensitivity and break-even remain incomplete"}
+    {"id": "B01", "item": "Break-even remains incomplete"}
   ],
-  "test_evidence": {"tests_run": 91, "failures": 0, "errors": 0},
+  "test_evidence": {"tests_run": 105, "failures": 0, "errors": 0},
   "energy_gate": {
     "status": "PASS",
     "weather_sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
@@ -62,6 +64,35 @@
     "dominance_edges_all_scenarios": 6,
     "minimum_jaccard_to_central_primary": 1.0,
     "numerical_sensitivity_executed": false
+  },
+  "numerical_ofat_sensitivity_gate": {
+    "status": "PASS",
+    "assertions": ["S01", "Q13", "S02", "S03", "S04", "Q14", "S05"],
+    "registered_endpoint_evaluations": 24,
+    "valid_changed_input_runs": 23,
+    "excluded_duplicate_endpoint": {
+      "run_id": "V_rec__low",
+      "value": 0.0,
+      "reason": "locked_endpoint_equals_central"
+    },
+    "central_non_dominated_set": ["V02", "V04", "V06", "V08"],
+    "only_changed_set_run": {
+      "run_id": "p_rev__low",
+      "non_dominated_set": ["V04", "V08"],
+      "jaccard_to_central": 0.5
+    },
+    "pareto_inclusion_counts": {
+      "denominator": 23,
+      "V01": 0,
+      "V02": 22,
+      "V03": 0,
+      "V04": 23,
+      "V05": 0,
+      "V06": 22,
+      "V07": 0,
+      "V08": 23
+    },
+    "break_even_executed": false
   },
   "baseline_executed": false
 }
