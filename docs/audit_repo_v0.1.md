@@ -1,9 +1,9 @@
-# Formal Audit — Repo v0.1, Energy, Lifecycle-Energy, and Cost Gates
+# Formal Audit — Repo v0.1 through Evidence Gate
 
 Audit date: 2026-10-07
 Audit scope: repository structure, controlled inputs, locked variant/design
-contract, QA registration, energy, lifecycle-energy, and cost implementation,
-and readiness to run.
+contract, QA registration, energy, lifecycle-energy, cost, and PSCF-informed
+evidence implementation, and readiness to run.
 Decision rule: `PASS` means evidence satisfies the locked contract;
 `MISMATCH` means a non-scientific repository/release gap exists; `BLOCKER`
 means execution cannot safely proceed.
@@ -21,11 +21,13 @@ means execution cannot safely proceed.
   intervention-burden, and scheduled-year equations pass their scoped QA.
 - Lifecycle-cost gate: **PASS** — locked initial, recurring, corrective,
   inverter, EoL, discounting, WLC, and cost-intensity equations pass.
+- PSCF-informed Evidence Gate: **PASS** — item-level evidence coding, central
+  dimensions, GAP-excluded robustness, and Q11/Q14 pass.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **43 PASS / 5 MISMATCH / 1 BLOCKER** across 49 checks.
+Summary: **49 PASS / 5 MISMATCH / 1 BLOCKER** across 55 checks.
 
 ## Controlled-source evidence
 
@@ -85,13 +87,19 @@ recomputed hashes of the three supplied files.
 | K06 | PASS | End-of-life accounting | Central owner recovery is zero. EoL removal remains a break-even/stress variable. The transport component plus processing component reconciles to the all-in recycling fee and is not added a second time. |
 | K07 | PASS | Discounted WLC and cost intensity | End-of-year recurring costs, scheduled inverter replacement, and terminal EoL cost reconcile to component present values and WLC. `CostIntensity = WLC/E_life`; electricity revenue is not inserted into WLC. |
 | K08 | PASS | Controlled cost integration | All eight variants produce finite, non-negative cost outputs. Internal C01–C04 and formal Q08–Q10/Q14 checks pass. Replacement scope creates no unsupported central WLC difference. |
+| P01 | PASS | PSCF method boundary | The published PSCF remains qualitative. Repository outputs use the locked label “PSCF-informed evidence-readiness” and do not present the study-specific code as a native PSCF score. |
+| P02 | PASS | Item-level evidence registry | All 13 mechanistic, institutional, and contextual items retain value, evidence state, input status, source ID, sheet, and row provenance. Variant factors affect only `M_REV` and `M_REP`. |
+| P03 | PASS | Central dimension reconciliation | Item arithmetic reproduces locked M profiles 0.25/0.50/0.50/0.75, common I=0.70, common C=0.50, and combined values 0.4833/0.5667/0.5667/0.65. |
+| P04 | PASS | GAP structural treatment | `M_DFD_DOC` and `I_TAKE` are the only excluded GAP items. Dimensions are recomputed from item labels; `C_LOG` remains an explicit zero constraint in the contextual denominator. |
+| P05 | PASS | Factor isolation | Institutional and contextual dimensions are identical across V01–V08; direct versus ventilated mounting produces no evidence-readiness difference. Q11 passes. |
+| P06 | PASS | Evidence numerical integrity | Central and GAP-excluded M/I/C/combined values are finite and bounded in [0,1]. The combined structural criterion is an unweighted arithmetic mean. Q14 passes. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 67 tests pass: input integrity, variant matrix, lifecycle/cost/circularity contracts, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, energy and lifecycle tests, and cost equation/integration tests. |
+| V02 | PASS | Automated validation | 79 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence contracts, item-level GAP handling, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, and all implemented gate equations. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | PSCF, Pareto, sensitivity, and break-even modules remain skeletons. The baseline runner correctly stays disabled until those gates are implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, and cost gates were executed. No formal baseline, sensitivity, Pareto, break-even table, or figure was generated. |
+| B01 | BLOCKER | Full baseline execution | Pareto, sensitivity, and break-even modules remain skeletons. The baseline runner correctly stays disabled until those gates are implemented and tested. |
+| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, and Evidence Gates were executed. No formal baseline, sensitivity, Pareto, break-even table, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -113,7 +121,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete PSCF-informed evidence, Pareto, sensitivity, and break-even modules.
+1. Complete Pareto, sensitivity, and break-even modules.
 2. Resolve license, citation authorship, and GitHub remote/release metadata.
 3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
 
@@ -121,7 +129,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 67 tests
+Ran 79 tests
 OK
 ```
 

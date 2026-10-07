@@ -1,11 +1,14 @@
 {
   "audit_date": "2026-10-06",
-  "scope": "Repo v0.1 skeleton and energy implementation gate",
-  "summary": {"PASS": 28, "MISMATCH": 5, "BLOCKER": 1, "total": 34},
+  "scope": "Repo v0.1 through PSCF-informed Evidence Gate",
+  "summary": {"PASS": 49, "MISMATCH": 5, "BLOCKER": 1, "total": 55},
   "disposition": {
     "computational_contract": "PASS",
     "repo_skeleton": "PASS",
     "energy_implementation": "PASS",
+    "lifecycle_energy": "PASS",
+    "lifecycle_cost": "PASS",
+    "pscf_informed_evidence": "PASS",
     "baseline_execution": "BLOCKED",
     "public_github_release": "HOLD"
   },
@@ -17,15 +20,27 @@
     {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"}
   ],
   "blockers": [
-    {"id": "B01", "item": "Downstream lifecycle and decision modules remain skeletons"}
+    {"id": "B01", "item": "Pareto, sensitivity, and break-even modules remain skeletons"}
   ],
-  "test_evidence": {"tests_run": 38, "failures": 0, "errors": 0},
+  "test_evidence": {"tests_run": 79, "failures": 0, "errors": 0},
   "energy_gate": {
     "status": "PASS",
     "weather_sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
     "direct_E1_kwh": 161751.98052177395,
     "ventilated_E1_kwh": 166904.08109413524,
     "assertions": ["Q01", "Q02", "Q03", "Q04", "Q05"]
+  },
+  "evidence_gate": {
+    "status": "PASS",
+    "assertions": ["E01", "E02", "E03", "Q11", "E04", "Q14"],
+    "central_profiles": {
+      "mechanistic": [0.25, 0.5, 0.5, 0.75],
+      "institutional": 0.7,
+      "contextual": 0.5,
+      "combined": [0.48333333333333334, 0.5666666666666667, 0.5666666666666667, 0.65]
+    },
+    "gap_items": ["M_DFD_DOC", "I_TAKE"],
+    "explicit_zero_constraint_retained": "C_LOG"
   },
   "baseline_executed": false
 }

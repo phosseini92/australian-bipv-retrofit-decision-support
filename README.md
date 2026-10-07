@@ -38,9 +38,16 @@ corrective material replacement, the common reference inverter allowance,
 end-of-life recycling/recovery rules, end-of-year discounting, WLC, and WLC per
 lifetime kWh. Unsupported access and removal tariffs remain excluded from the
 central accounting and reserved for break-even analysis. These are
-gate-validation results, not a completed baseline. PSCF, Pareto, break-even,
-and sensitivity modules remain closed, and baseline execution is still
-intentionally disabled.
+gate-validation results, not a completed baseline.
+
+The PSCF-informed Evidence Gate has now passed too. Item-level evidence is
+carried into mechanistic, institutional, and contextual dimensions without
+presenting the study-specific 0/0.5/1 coding as a native PSCF score. The
+structural GAP run excludes only items explicitly labelled `GAP`; documented
+constraints remain zero. Institutional and contextual values are common across
+all variants, and mounting creates no evidence-readiness difference. Pareto,
+break-even, and sensitivity modules remain closed, and baseline execution is
+still intentionally disabled.
 
 ## Controlled sources
 
@@ -69,6 +76,7 @@ python -m venv .venv
 .venv/bin/python analysis/run_energy_gate.py
 .venv/bin/python analysis/run_lifecycle_energy_gate.py
 .venv/bin/python analysis/run_cost_gate.py
+.venv/bin/python analysis/run_evidence_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
@@ -76,8 +84,8 @@ formal audit and integration-gate tests.
 
 The baseline, sensitivity, Pareto, and break-even entry points continue to fail
 closed until the downstream implementation gates pass. The authorised numerical
-runners at this stage are the energy, lifecycle-energy, and cost gates; none is
-the formal baseline.
+runners at this stage are the energy, lifecycle-energy, cost, and Evidence
+Gates; none is the formal baseline.
 
 ## Repository map
 

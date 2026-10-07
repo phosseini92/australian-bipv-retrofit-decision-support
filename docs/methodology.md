@@ -48,5 +48,13 @@ those services are costless; they remain explicit break-even/stress variables.
 The all-in recycling fee already contains transport, so its transport component
 is reported as a decomposition and is not added again. Electricity is not
 monetised inside WLC because lifetime electricity remains a separate decision
-criterion. PSCF-informed evidence, Pareto, sensitivity, break-even, and full
-baseline execution remain disabled.
+criterion.
+
+The Evidence Gate operationalises the locked, study-specific 0/0.5/1
+evidence-readiness code at item level. It does not treat that code as a native
+PSCF score. The central run retains documented evidence gaps as zero and flags
+them; the structural robustness run recomputes each affected dimension after
+excluding only GAP-labelled items. Explicit documented constraints remain zero
+and stay in their denominators. The combined structural criterion is the
+unweighted arithmetic mean of M, I, and C, exactly as locked. Pareto,
+sensitivity, break-even, and full baseline execution remain disabled.

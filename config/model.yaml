@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "status": "COST_GATE_PASSED_BASELINE_DISABLED",
+  "status": "EVIDENCE_GATE_PASSED_BASELINE_DISABLED",
   "simulation_enabled": false,
   "module_status": {
     "weather": "controlled_epw_validated",
@@ -13,7 +13,8 @@
     "replacement": "intervention_burden_equations_tested",
     "lifecycle_energy": "integration_gate_passed",
     "lifecycle_cost": "integration_gate_passed",
-    "pscf_pareto_break_even_sensitivity": "skeleton_only"
+    "circularity": "item_level_evidence_gate_passed",
+    "pareto_break_even_sensitivity": "skeleton_only"
   },
   "input_source": "data/inputs/source_manifest.yaml",
   "invariants": {
