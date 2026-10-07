@@ -1,10 +1,13 @@
 cff-version: 1.2.0
-message: "Please cite the frozen release associated with the APSRC Proceedings analysis."
+message: "Please cite the exact frozen v0.1.0 release archived on Zenodo."
 title: "Australian BIPV Retrofit Decision Support"
 type: software
 version: 0.1.0
 date-released: 2026-10-07
 license: MIT
+doi: "10.5281/zenodo.23217982"
+url: "https://doi.org/10.5281/zenodo.23217982"
+repository-code: "https://github.com/phosseini92/australian-bipv-retrofit-decision-support"
 authors:
   - family-names: "Hosseini"
     given-names: "Parisa"

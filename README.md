@@ -1,8 +1,28 @@
 # Australian BIPV Retrofit Decision Support
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23217982.svg)](https://doi.org/10.5281/zenodo.23217982)
+
 Repository v0.1 implements the first controlled milestone for the APSRC study
 *Beyond Energy Yield: Lifecycle Value and Circularity Readiness of Australian
 BIPV Retrofits*.
+
+## Archived release and citation
+
+The exact frozen `v0.1.0` release is permanently archived on Zenodo at
+[https://doi.org/10.5281/zenodo.23217982](https://doi.org/10.5281/zenodo.23217982).
+Use this version-specific DOI when citing the implementation used for the
+current analysis. The all-versions DOI,
+[https://doi.org/10.5281/zenodo.23217981](https://doi.org/10.5281/zenodo.23217981),
+resolves to the latest published version of the software.
+
+Suggested citation:
+
+> Hosseini, P. (2026). *Australian BIPV Retrofit Decision Support* (Version
+> 0.1.0) [Computer software]. Zenodo.
+> https://doi.org/10.5281/zenodo.23217982
+
+Documentation-only updates on `main` do not modify the tagged `v0.1.0`
+computational release or its archived ZIP bundle.
 
 ## Repo v0.1 audit and integration-gate status
 
@@ -159,4 +179,4 @@ proprietary data assets, hosted services, branding, and customer workflows are
 intentionally outside this repository and may remain private or be licensed
 separately.
 
-For citation, use the release metadata in [CITATION.cff](CITATION.cff).
+For machine-readable citation metadata, use [CITATION.cff](CITATION.cff).
