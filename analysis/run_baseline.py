@@ -184,7 +184,7 @@ def _plot_energy_cost(path: Path, analysis: BaselineAnalysis) -> None:
             s=92 if selected else 58,
             marker="o" if selected else "x",
             color="#0072B2" if selected else "#777777",
-            linewidth=1.5, zorder=3,
+            linewidth=1.5, zorder=3 if selected else 4,
         )
         ax.annotate(
             variant_id,
