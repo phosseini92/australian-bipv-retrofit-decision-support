@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-10-07",
   "scope": "Repo v0.1 through formal baseline execution",
-  "summary": {"PASS": 87, "MISMATCH": 6, "BLOCKER": 0, "total": 93},
+  "summary": {"PASS": 89, "MISMATCH": 4, "BLOCKER": 0, "total": 93},
   "disposition": {
     "computational_contract": "PASS",
     "repo_skeleton": "PASS",
@@ -21,8 +21,6 @@
     {"id": "A04", "item": "Original controlled Office binaries are not vendored"},
     {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"},
     {"id": "NS06", "item": "V_rec low equals its central value of zero and is excluded from valid changed-input runs"},
-    {"id": "G01", "item": "Public license is not selected"},
-    {"id": "G02", "item": "Citation author/release metadata is incomplete"},
     {"id": "G03", "item": "GitHub remote and release/tag are absent"}
   ],
   "blockers": [],

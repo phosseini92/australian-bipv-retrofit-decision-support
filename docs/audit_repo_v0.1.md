@@ -16,10 +16,11 @@ the model; `BLOCKER` means execution cannot safely proceed.
 - Break-even Gate: **PASS** under approved `CC-002 D1-B + D2-A + D3-A`.
 - Formal baseline execution: **PASS**; all seven table/manifest outputs and all
   three required figures were exported after 58 parent-gate QA checks passed.
-- Public GitHub release: **HOLD** pending license, author/citation metadata, and
-  remote/release setup. This is not a scientific-computation blocker.
+- Public GitHub release: **HOLD** only pending GitHub remote/release setup.
+  MIT licensing, author attribution, and citation metadata are complete. This
+  is not a scientific-computation blocker.
 
-Summary: **87 PASS / 6 MISMATCH / 0 BLOCKER** across 93 checks.
+Summary: **89 PASS / 4 MISMATCH / 0 BLOCKER** across 93 checks.
 
 ## Controlled-source evidence
 
@@ -60,9 +61,9 @@ Summary: **87 PASS / 6 MISMATCH / 0 BLOCKER** across 93 checks.
 | BL01 | PASS | Baseline is enabled only after all implementation Gates and `CC-002` pass. |
 | BL02 | PASS | `variant_central.csv`, `factor_contrasts.csv`, `sensitivity_runs.csv`, `pareto_primary.csv`, `pareto_robustness.csv`, `break_even.csv`, `run_manifest.json`, and three locked PNG figures are exported. |
 | BL03 | PASS | Export is staged before replacement; the manifest records source/weather/runtime provenance, all parent QA results, and SHA-256 for the nine table/figure artifacts. |
-| G01 | MISMATCH | `LICENSE` remains an all-rights-reserved placeholder; a public license has not been selected. |
-| G02 | MISMATCH | `CITATION.cff` still lacks author/ORCID and release identifier metadata. |
-| G03 | MISMATCH | No GitHub remote, tag, or public release exists yet. |
+| G01 | PASS | Repository code is released under MIT with Parisa Hosseini as copyright holder. |
+| G02 | PASS | `CITATION.cff` records Parisa Hosseini, ORCID, MIT, date-released, and version `0.1.0`. |
+| G03 | MISMATCH | No GitHub remote or public release exists yet; the local `v0.1.0` tag is prepared for publication. |
 
 ## Primary numerical findings
 
@@ -83,11 +84,10 @@ Summary: **87 PASS / 6 MISMATCH / 0 BLOCKER** across 93 checks.
 
 ## Remaining release close-out
 
-The scientific baseline is no longer blocked. Before a public GitHub v0.1
-release, the owner must select a license, complete citation authorship/ORCID and
-release metadata, configure the GitHub remote, and create the intended tag or
-release. The EPW evidence-period limitation and duplicate `V_rec` endpoint must
-remain disclosed in the article/repository documentation.
+The scientific baseline is no longer blocked. Before public GitHub publication,
+configure the GitHub remote and publish the prepared `v0.1.0` tag/release. The
+EPW evidence-period limitation and duplicate `V_rec` endpoint must remain
+disclosed in the article/repository documentation.
 
 ## Audit command evidence
 

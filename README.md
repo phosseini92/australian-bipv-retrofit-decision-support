@@ -149,3 +149,14 @@ Research-design, input, equation, execution-order, decision-rule, and output
 changes require a new controlled source version and an explicit impact review.
 Code organization may change, but the locked analysis contract must not change
 silently.
+
+## License and product boundary
+
+The reproducibility implementation in this repository is released under the
+[MIT License](LICENSE). It is a frozen research implementation, not the future
+commercial application. Product-specific interface code, integrations,
+proprietary data assets, hosted services, branding, and customer workflows are
+intentionally outside this repository and may remain private or be licensed
+separately.
+
+For citation, use the release metadata in [CITATION.cff](CITATION.cff).

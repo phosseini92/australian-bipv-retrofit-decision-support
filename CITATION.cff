@@ -3,4 +3,10 @@ message: "Please cite the frozen release associated with the APSRC Proceedings a
 title: "Australian BIPV Retrofit Decision Support"
 type: software
 version: 0.1.0
-abstract: "Controlled implementation scaffold for the locked APSRC BIPV lifecycle decision study."
+date-released: 2026-10-07
+license: MIT
+authors:
+  - family-names: "Hosseini"
+    given-names: "Parisa"
+    orcid: "https://orcid.org/0009-0009-0168-8912"
+abstract: "Controlled, reproducible implementation of the locked APSRC BIPV lifecycle decision study."
