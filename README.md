@@ -50,9 +50,13 @@ all variants, and mounting creates no evidence-readiness difference.
 The central primary Pareto Gate has also passed. It evaluates the seven locked
 raw criteria in their stated directions, without weights or normalization, and
 uses only an eight-ULP tolerance to suppress floating-point noise. The central
-non-dominated set is V02, V04, V06, and V08. This gate does not execute the
-combined-circularity/GAP structural runs, numerical sensitivity, break-even, or
-the formal baseline.
+non-dominated set is V02, V04, V06, and V08.
+
+The locked criterion-structure and evidence-gap robustness gate has passed as
+well. The full primary/combined-CIRC × GAP-zero/excluded matrix retains the
+same non-dominated set and the same six dominance edges in all four scenarios;
+each scenario has Jaccard similarity 1.0 to the central-primary set. Numerical
+OFAT sensitivity, break-even, and the formal baseline remain disabled.
 
 ## Controlled sources
 
@@ -83,6 +87,7 @@ python -m venv .venv
 .venv/bin/python analysis/run_cost_gate.py
 .venv/bin/python analysis/run_evidence_gate.py
 .venv/bin/python analysis/run_pareto_gate.py
+.venv/bin/python analysis/run_pareto_robustness_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
@@ -90,8 +95,8 @@ formal audit and integration-gate tests.
 
 The baseline, sensitivity, Pareto, and break-even entry points continue to fail
 closed until the downstream implementation gates pass. The authorised numerical
-runners at this stage are the energy, lifecycle-energy, cost, Evidence, and
-central primary Pareto Gates; none is the formal baseline.
+runners at this stage are the energy, lifecycle-energy, cost, Evidence, central
+primary Pareto, and Pareto robustness Gates; none is the formal baseline.
 
 ## Repository map
 

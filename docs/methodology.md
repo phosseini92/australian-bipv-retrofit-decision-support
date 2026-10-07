@@ -65,5 +65,11 @@ strictly better on at least one. No weights or normalization are applied. The
 implementation tolerance is limited to eight machine ULPs, solely to suppress
 floating-point noise. Institutional and contextual criteria remain in the
 vector and are reported as constant; no artificial differences are introduced.
-Criterion-structure/GAP robustness, numerical sensitivity, break-even, and the
-formal baseline remain disabled.
+
+Criterion-structure/GAP robustness is evaluated as a complete 2×2 matrix:
+three separate M/I/C dimensions versus the combined CIRC criterion, each under
+central GAP-as-zero and GAP-excluded dimension arithmetic. CIRC is recomputed
+from item-derived M/I/C values and introduces no weights. Scenario sets are
+compared to central-primary with Jaccard similarity, treated as a robustness
+summary rather than a probability. Numerical OFAT sensitivity, break-even, and
+the formal baseline remain disabled.

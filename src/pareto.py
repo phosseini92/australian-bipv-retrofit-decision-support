@@ -64,6 +64,31 @@ class ParetoAnalysis:
         )
 
 
+@dataclass(frozen=True)
+class StructuralParetoScenario:
+    scenario_id: str
+    criterion_structure: str
+    gap_treatment: str
+    analysis: ParetoAnalysis
+    jaccard_to_central_primary: float
+
+    def as_record(self) -> dict[str, Any]:
+        return {
+            "scenario_id": self.scenario_id,
+            "criterion_structure": self.criterion_structure,
+            "gap_treatment": self.gap_treatment,
+            "criteria": [
+                {"field": item.field, "direction": item.direction}
+                for item in self.analysis.criteria
+            ],
+            "non_dominated_set": list(self.analysis.non_dominated_ids),
+            "dominance_pairs": [
+                item.as_record() for item in self.analysis.dominance_pairs
+            ],
+            "jaccard_to_central_primary": self.jaccard_to_central_primary,
+        }
+
+
 def load_primary_criteria() -> tuple[Criterion, ...]:
     """Load and validate the locked raw primary criterion vector."""
 
@@ -84,6 +109,28 @@ def load_primary_criteria() -> tuple[Criterion, ...]:
     if invalid:
         raise ValueError(f"invalid Pareto direction(s): {invalid}")
     return criteria
+
+
+def load_combined_circularity_criteria() -> tuple[Criterion, ...]:
+    """Replace the locked M/I/C criteria with the locked combined CIRC field."""
+
+    model = load_model()["pareto"]
+    contract = model["criterion_structure_test"]
+    if contract["replace"] != ["M", "I", "C"]:
+        raise ValueError("combined-circularity replacement contract changed")
+    if contract["with"] != {"field": "CIRC", "direction": "maximize"}:
+        raise ValueError("combined-circularity criterion contract changed")
+    primary = load_primary_criteria()
+    retained = tuple(item for item in primary if item.field not in contract["replace"])
+    expected_retained = ("E_life", "A_life", "WLC", "B_dist")
+    if tuple(item.field for item in retained) != expected_retained:
+        raise ValueError("primary criterion structure changed")
+    return retained + (
+        Criterion(
+            str(contract["with"]["field"]),
+            str(contract["with"]["direction"]),
+        ),
+    )
 
 
 def _finite_value(record: Mapping[str, Any], field: str) -> float:
@@ -200,4 +247,76 @@ def analyze_pareto(
     return ParetoAnalysis(criteria, outcomes, tuple(pairs))
 
 
-IMPLEMENTATION_STATUS = "IMPLEMENTED_PRIMARY_PARETO_GATE"
+def jaccard_similarity(
+    reference_ids: Sequence[str], candidate_ids: Sequence[str]
+) -> float:
+    """Return set Jaccard similarity; this is a robustness summary, not probability."""
+
+    reference = set(reference_ids)
+    candidate = set(candidate_ids)
+    union = reference | candidate
+    return 1.0 if not union else len(reference & candidate) / len(union)
+
+
+def analyze_structural_robustness(
+    central_records: Sequence[Mapping[str, Any]],
+    gap_excluded_records: Sequence[Mapping[str, Any]],
+    *,
+    tolerance_ulps: int = FLOAT_TOLERANCE_ULPS,
+) -> tuple[StructuralParetoScenario, ...]:
+    """Run the locked 2×2 criterion-structure × GAP-treatment matrix."""
+
+    central_ids = tuple(str(record["id"]) for record in central_records)
+    gap_ids = tuple(str(record["id"]) for record in gap_excluded_records)
+    if central_ids != gap_ids:
+        raise ValueError("central and GAP-excluded variant order differs")
+    invariant_fields = (
+        "short_code", "mounting", "connection", "replacement_scope",
+        "E_life", "A_life", "WLC", "B_dist",
+    )
+    for central, gap_excluded in zip(central_records, gap_excluded_records):
+        changed = [
+            field for field in invariant_fields
+            if central[field] != gap_excluded[field]
+        ]
+        if changed:
+            raise ValueError(
+                f"GAP treatment changed non-evidence fields for {central['id']}: {changed}"
+            )
+
+    primary = load_primary_criteria()
+    combined = load_combined_circularity_criteria()
+    definitions = (
+        ("primary_gap_zero", "three_dimensions", "zero", central_records, primary),
+        ("combined_gap_zero", "combined_CIRC", "zero", central_records, combined),
+        (
+            "primary_gap_excluded", "three_dimensions", "exclude",
+            gap_excluded_records, primary,
+        ),
+        (
+            "combined_gap_excluded", "combined_CIRC", "exclude",
+            gap_excluded_records, combined,
+        ),
+    )
+    analyses = [
+        analyze_pareto(records, criteria=criteria, tolerance_ulps=tolerance_ulps)
+        for _, _, _, records, criteria in definitions
+    ]
+    reference_set = analyses[0].non_dominated_ids
+    return tuple(
+        StructuralParetoScenario(
+            scenario_id=scenario_id,
+            criterion_structure=structure,
+            gap_treatment=gap_treatment,
+            analysis=analysis,
+            jaccard_to_central_primary=jaccard_similarity(
+                reference_set, analysis.non_dominated_ids
+            ),
+        )
+        for (scenario_id, structure, gap_treatment, _, _), analysis in zip(
+            definitions, analyses
+        )
+    )
+
+
+IMPLEMENTATION_STATUS = "IMPLEMENTED_PARETO_ROBUSTNESS_GATE"

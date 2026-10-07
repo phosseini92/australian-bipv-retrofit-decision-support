@@ -1,4 +1,4 @@
-# Formal Audit — Repo v0.1 through Central Primary Pareto Gate
+# Formal Audit — Repo v0.1 through Pareto Structural Robustness Gate
 
 Audit date: 2026-10-07
 Audit scope: repository structure, controlled inputs, locked variant/design
@@ -25,11 +25,13 @@ means execution cannot safely proceed.
   dimensions, GAP-excluded robustness, and Q11/Q14 pass.
 - Central primary Pareto Gate: **PASS** — raw seven-criterion dominance,
   pairwise QA, and Q12/Q14 pass without weights or normalization.
+- Pareto structural robustness gate: **PASS** — primary/combined-CIRC ×
+  GAP-zero/excluded set comparison and robustness QA pass.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **55 PASS / 5 MISMATCH / 1 BLOCKER** across 61 checks.
+Summary: **61 PASS / 5 MISMATCH / 1 BLOCKER** across 67 checks.
 
 ## Controlled-source evidence
 
@@ -100,14 +102,20 @@ recomputed hashes of the three supplied files.
 | PA03 | PASS | No preference transformation | No weighting, normalization, composite score, or practical-equivalence band is used. Q12 passes. |
 | PA04 | PASS | Dominance graph | Six directed dominance edges are reproduced: V02→V01/V03, V04→V03, V06→V05/V07, and V08→V07. The graph is irreflexive and asymmetric. |
 | PA05 | PASS | Central non-dominated set | The primary central set is V02, V04, V06, and V08. Each remaining assembly-level variant has at least one valid incoming dominance edge. |
-| PA06 | PASS | Scope isolation | Combined-circularity, GAP-treatment Pareto, OFAT sensitivity, break-even, final CSV outputs, and figures were not executed. All central raw metrics are finite; Q14 passes. |
+| PA06 | PASS | Central-gate scope isolation | The central-primary runner itself emits no structural, OFAT, break-even, final CSV, or figure output. Structural robustness is executed only by the separate controlled gate below. All central raw metrics are finite; Q14 passes. |
+| PR01 | PASS | Structural-run contract | The full primary/combined-CIRC × GAP-zero/excluded matrix is executed from the two locked named structural runs, including their joint condition. |
+| PR02 | PASS | Criterion replacement | Combined runs replace exactly M/I/C with CIRC; E_life, A_life, WLC, and B_dist remain unchanged and raw. |
+| PR03 | PASS | GAP isolation | GAP exclusion changes only item-derived evidence dimensions. Non-evidence metrics remain bit-identical, and CIRC is recomputed as the unweighted M/I/C mean. |
+| PR04 | PASS | Set stability | All four scenarios retain V02/V04/V06/V08. Every Jaccard similarity to central-primary is 1.0. |
+| PR05 | PASS | Graph stability | All scenarios retain the same six dominance edges; no edge is created or removed by criterion representation or GAP treatment. |
+| PR06 | PASS | Robustness scope | Q12 and Q14 pass. No numerical OFAT sensitivity, inclusion frequency, break-even, final baseline output, or figure is produced. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 86 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto contracts, item-level GAP handling, raw dominance behaviour, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
+| V02 | PASS | Automated validation | 91 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto contracts, item-level GAP handling, raw and structural dominance behaviour, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | Criterion-structure/GAP Pareto robustness, sensitivity, and break-even remain incomplete. The baseline runner correctly stays disabled until those gates are implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, and central primary Pareto Gates were executed. No formal baseline, sensitivity, break-even table, locked final Pareto CSV, or figure was generated. |
+| B01 | BLOCKER | Full baseline execution | Numerical OFAT sensitivity and break-even remain incomplete. The baseline runner correctly stays disabled until those gates are implemented and tested. |
+| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, central primary Pareto, and Pareto robustness Gates were executed. No formal baseline, numerical sensitivity table, break-even table, locked final Pareto CSV, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -129,7 +137,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete criterion-structure/GAP Pareto robustness, sensitivity, and break-even modules.
+1. Complete numerical OFAT sensitivity and break-even modules.
 2. Resolve license, citation authorship, and GitHub remote/release metadata.
 3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
 
@@ -137,7 +145,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 86 tests
+Ran 91 tests
 OK
 ```
 
