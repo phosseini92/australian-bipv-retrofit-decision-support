@@ -195,6 +195,7 @@ def _plot_energy_cost(path: Path, analysis: BaselineAnalysis) -> None:
     ax.set_xlabel("Whole-life cost (A$ thousand; lower is better)")
     ax.set_ylabel("Lifetime electricity (GWh; higher is better)")
     ax.set_title("Central energy–cost view of the primary Pareto result")
+    ax.margins(x=0.05, y=0.08)
     ax.grid(alpha=0.22)
     ax.legend(
         handles=[
