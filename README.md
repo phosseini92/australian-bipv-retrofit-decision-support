@@ -37,8 +37,9 @@ implements initial mounting and reversibility cost, annual O&M, expected
 corrective material replacement, the common reference inverter allowance,
 end-of-life recycling/recovery rules, end-of-year discounting, WLC, and WLC per
 lifetime kWh. Unsupported access and removal tariffs remain excluded from the
-central accounting and reserved for break-even analysis. These are
-gate-validation results, not a completed baseline.
+central accounting and reserved for break-even analysis. These gate-validation
+results feed the completed baseline without introducing those unsupported
+tariffs into central WLC.
 
 The PSCF-informed Evidence Gate has now passed too. Item-level evidence is
 carried into mechanistic, institutional, and contextual dimensions without
@@ -65,21 +66,25 @@ transparently reported but excluded from the robustness denominator. The
 central set is unchanged in 22/23 valid runs. At `p_rev=0`, V02 and V06 lose
 their cost disadvantage relative to their reversible counterparts and the
 non-dominated set becomes V04/V08 (Jaccard 0.5). Pareto-inclusion frequencies
-are robustness summaries, not probabilities. Break-even and the formal
-baseline remain disabled.
+are robustness summaries, not probabilities.
 
-The computable portion of the Break-even Gate is now implemented and passes its
-formula/root-status QA, but final Gate approval is blocked by locked-source
-clarification rather than by a software error. The explicit Section 11.2 access
-equation gives A$14,017.27/event, whereas full WLC equality gives
-A$14,886.98/event because WLC also makes O&M proportional to premium-inclusive
-initial cost. No ventilated/direct matched pair reaches cost-intensity parity
-within the locked integer search of 10–50 years. The incremental recovery
-threshold is A$18,794.48/t, about 16.63 times the locked A$1,130/t upper value.
-The sources also do not designate the A/B pair required for the primary
-discount-rate threshold; code therefore reports all one-factor candidates but
-does not select one. These thresholds answer “what would have to be true?” and
-are not claims that such market values exist.
+The two registered energy structural cases have also passed. West orientation
+retains the central V02/V04/V06/V08 set (`Jaccard=1.0`). Under the locked
+equal-temperature control the set becomes V02/V04 (`Jaccard=0.5`), transparently
+showing that the ventilated variants' central Pareto status depends on their
+mounting-temperature energy benefit.
+
+The Break-even Gate passes under approved change control `CC-002 D1-B + D2-A +
+D3-A`. Full discounted WLC equality is the primary access threshold at
+A$14,886.98/event; the literal initial-premium value A$14,017.27/event is
+retained as a diagnostic. All four reversible/low pairs are primary `BE_r`
+comparisons and have no root over 0–15% real. No ventilated/direct pair reaches
+cost-intensity parity within 10–50 years, and the incremental recovery threshold
+is A$18,794.48/t. No independent intervention-frequency threshold is invented.
+
+After every implementation Gate passed, the formal baseline was enabled and
+executed. It exports the seven locked table/manifest files and three PNG
+figures atomically, only after 58 parent-gate QA checks pass.
 
 ## Controlled sources
 
@@ -112,17 +117,18 @@ python -m venv .venv
 .venv/bin/python analysis/run_pareto_gate.py
 .venv/bin/python analysis/run_pareto_robustness_gate.py
 .venv/bin/python analysis/run_numerical_ofat_gate.py
+.venv/bin/python analysis/run_energy_structural_gate.py
 .venv/bin/python analysis/run_break_even_gate.py
+.venv/bin/python analysis/run_baseline.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
 formal audit and integration-gate tests.
 
-The baseline, final sensitivity export, final Pareto export, and final
-break-even entry points continue to fail closed until the locked-source issues
-are resolved. The authorised controlled runners at this stage are the energy,
-lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness,
-Numerical OFAT, and Break-even computation Gates; none is the formal baseline.
+The formal baseline runner is enabled only because all implementation Gates and
+the approved `CC-002` decisions pass. The three legacy standalone final-export
+entry points remain fail-closed; the baseline runner is the single controlled
+export path and includes sensitivity, Pareto, and break-even outputs together.
 
 ## Repository map
 
@@ -130,11 +136,12 @@ Numerical OFAT, and Break-even computation Gates; none is the formal baseline.
 - `data/inputs/`: machine-readable controlled-input snapshot and provenance.
 - `src/`: validation utilities, the implemented energy chain, and downstream
   locked module boundaries.
-- `analysis/`: guarded future entry points.
+- `analysis/`: controlled Gate runners and the atomic formal baseline exporter.
 - `tests/`: lock-integrity and static QA tests.
 - `docs/`: methodology, source, assumption-status, and scope notes.
-- `outputs/`: reserved locked output locations; gate QA artifacts are explicitly
-  marked as non-baseline.
+- `outputs/`: locked baseline tables/figures plus explicitly labelled Gate QA
+  artifacts; generated outputs remain Git-ignored and are hash-listed in the
+  run manifest.
 
 ## Change control
 

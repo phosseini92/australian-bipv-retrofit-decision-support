@@ -66,13 +66,16 @@ class BreakEvenIntegrationTests(unittest.TestCase):
             all(item.value == 0.0 for item in self.analysis.maximum_premium)
         )
 
-    def test_access_formula_mismatch_is_numerically_exposed(self):
-        locked = self.analysis.required_access_saving_locked_formula[0]
-        diagnostic = self.analysis.required_access_saving_wlc_diagnostic[0]
-        self.assertAlmostEqual(locked.value, 14017.27206310166)
-        self.assertAlmostEqual(diagnostic.value, 14886.976594658823)
-        self.assertAlmostEqual(locked.residual, 1708.8980865952362)
-        self.assertAlmostEqual(diagnostic.residual, 0.0)
+    def test_cc002_d1_b_makes_full_wlc_threshold_primary(self):
+        primary = self.analysis.required_access_saving_primary_wlc[0]
+        diagnostic = (
+            self.analysis
+            .required_access_saving_initial_premium_diagnostic[0]
+        )
+        self.assertAlmostEqual(primary.value, 14886.976594658823)
+        self.assertAlmostEqual(diagnostic.value, 14017.27206310166)
+        self.assertAlmostEqual(primary.residual, 0.0)
+        self.assertAlmostEqual(diagnostic.residual, 1708.8980865952362)
 
     def test_no_service_life_break_even_is_reported_explicitly(self):
         for item in self.analysis.service_life:
@@ -86,11 +89,16 @@ class BreakEvenIntegrationTests(unittest.TestCase):
             self.assertAlmostEqual(item.value, 18794.47552573408)
             self.assertAlmostEqual(item.residual, 0.0)
 
-    def test_discount_rate_pair_is_not_invented(self):
+    def test_cc002_d2_a_uses_all_four_connection_pairs(self):
         self.assertEqual(
-            self.analysis.discount_rate_primary.status,
-            "LOCKED_PAIRWISE_COMPARISON_NOT_SPECIFIED",
+            [item.comparison_id for item in self.analysis.discount_rate_primary],
+            ["V03_vs_V01", "V04_vs_V02", "V07_vs_V05", "V08_vs_V06"],
         )
+        self.assertTrue(all(
+            item.status == "NO_SIGN_CHANGE_WITHIN_BOUND"
+            and item.value is None
+            for item in self.analysis.discount_rate_primary
+        ))
         statuses = [
             item.status for item in self.analysis.discount_rate_candidate_matrix
         ]
@@ -106,7 +114,7 @@ class BreakEvenIntegrationTests(unittest.TestCase):
             if item.status.startswith("NO_") or item.status.startswith("IDENTICALLY_"):
                 self.assertIsNone(item.value)
 
-    def test_break_even_qa_passes_while_lock_blocker_remains_explicit(self):
+    def test_break_even_qa_passes_with_cc002_fully_implemented(self):
         qa = evaluate_break_even_assertions(self.analysis)
         self.assertEqual(
             [item.id for item in qa],
@@ -114,9 +122,10 @@ class BreakEvenIntegrationTests(unittest.TestCase):
         )
         self.assertTrue(all(item.status == "PASS" for item in qa))
         self.assertEqual(
-            [item["status"] for item in self.analysis.locked_spec_mismatches],
-            ["MISMATCH", "BLOCKER", "MISMATCH"],
+            [item["decision"] for item in self.analysis.cc002_approval],
+            ["D1-B", "D2-A", "D3-A"],
         )
+        self.assertFalse(self.analysis.open_locked_spec_issues)
 
 
 if __name__ == "__main__":

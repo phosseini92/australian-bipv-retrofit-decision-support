@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 .coverage
 .venv/
+.matplotlib-cache/
 *.egg-info/
 outputs/tables/*
 !outputs/tables/.gitkeep

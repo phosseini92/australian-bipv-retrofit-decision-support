@@ -1,11 +1,19 @@
 # Fully resolved energy-development environment, Python 3.12.14, 2026-10-06.
 certifi==2026.7.22
 charset-normalizer==3.5.2
+contourpy==1.4.0
+cycler==0.12.1
+fonttools==4.66.1
 h5py==3.16.0
 idna==3.20
+kiwisolver==1.5.1
+matplotlib==3.11.2
 numpy==2.3.5
+packaging==26.3
 pandas==2.2.3
+pillow==12.3.0
 pvlib==0.16.1
+pyparsing==3.3.3
 python-dateutil==2.9.0.post0
 pytz==2026.5
 requests==2.34.2

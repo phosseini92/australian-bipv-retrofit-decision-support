@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-10-07",
-  "scope": "Repo v0.1 through Break-even Computation Gate",
-  "summary": {"PASS": 75, "MISMATCH": 8, "BLOCKER": 1, "total": 84},
+  "scope": "Repo v0.1 through formal baseline execution",
+  "summary": {"PASS": 87, "MISMATCH": 6, "BLOCKER": 0, "total": 93},
   "disposition": {
     "computational_contract": "PASS",
     "repo_skeleton": "PASS",
@@ -12,109 +12,54 @@
     "central_primary_pareto": "PASS",
     "pareto_structural_robustness": "PASS",
     "numerical_ofat_sensitivity": "PASS",
-    "break_even_computation": "PASS",
-    "break_even_gate_approval": "BLOCKED_LOCKED_SPEC_CLARIFICATION",
-    "baseline_execution": "BLOCKED",
+    "energy_structural_sensitivity": "PASS",
+    "break_even_gate": "PASS_CC002_D1_B_D2_A_D3_A",
+    "baseline_execution": "PASS",
     "public_github_release": "HOLD"
   },
   "mismatches": [
-    {"id": "A04", "item": "Original controlled binaries are not vendored"},
+    {"id": "A04", "item": "Original controlled Office binaries are not vendored"},
+    {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"},
+    {"id": "NS06", "item": "V_rec low equals its central value of zero and is excluded from valid changed-input runs"},
     {"id": "G01", "item": "Public license is not selected"},
     {"id": "G02", "item": "Citation author/release metadata is incomplete"},
-    {"id": "G03", "item": "GitHub remote and release/tag are absent"},
-    {"id": "E14", "item": "Nominal 2011-2025 weather label differs from the EPW header's 2011-2015 available record"},
-    {"id": "NS06", "item": "V_rec low equals its central value of zero; the endpoint is retained but excluded from valid changed-input runs"},
-    {"id": "BE-M01", "item": "Explicit BE_access omits premium-driven O&M that is included by the locked WLC equation"},
-    {"id": "BE-M03", "item": "Research Design names an intervention-frequency threshold not defined by the Analysis Specification or Input Table"}
+    {"id": "G03", "item": "GitHub remote and release/tag are absent"}
   ],
-  "blockers": [
-    {"id": "B01", "item": "Primary BE_r requires a selected A/B pair not designated in the locked sources; access-equation clarification is also required"}
-  ],
-  "test_evidence": {"tests_run": 117, "failures": 0, "errors": 0},
-  "energy_gate": {
-    "status": "PASS",
+  "blockers": [],
+  "test_evidence": {"tests_run": 129, "failures": 0, "errors": 0},
+  "energy": {
     "weather_sha256": "8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e",
-    "direct_E1_kwh": 161751.98052177395,
-    "ventilated_E1_kwh": 166904.08109413524,
-    "assertions": ["Q01", "Q02", "Q03", "Q04", "Q05"]
+    "north_direct_E1_kwh": 161751.98052177395,
+    "north_ventilated_E1_kwh": 166904.08109413524,
+    "west_direct_E1_kwh": 123308.69932087886,
+    "west_ventilated_E1_kwh": 127239.7653102324,
+    "equal_temperature_E1_kwh": 164328.47048928862
   },
-  "evidence_gate": {
-    "status": "PASS",
-    "assertions": ["E01", "E02", "E03", "Q11", "E04", "Q14"],
-    "central_profiles": {
-      "mechanistic": [0.25, 0.5, 0.5, 0.75],
-      "institutional": 0.7,
-      "contextual": 0.5,
-      "combined": [0.48333333333333334, 0.5666666666666667, 0.5666666666666667, 0.65]
-    },
-    "gap_items": ["M_DFD_DOC", "I_TAKE"],
-    "explicit_zero_constraint_retained": "C_LOG"
-  },
-  "pareto_gate": {
-    "status": "PASS",
-    "assertions": ["D01", "D02", "D03", "D04", "Q12", "Q14"],
-    "criteria": ["E_life:max", "A_life:max", "WLC:min", "B_dist:min", "M:max", "I:max", "C:max"],
-    "non_dominated_set": ["V02", "V04", "V06", "V08"],
-    "dominance_edges": 6,
-    "weights": null,
-    "normalization": null,
-    "sensitivity_executed": false
-  },
-  "pareto_robustness_gate": {
-    "status": "PASS",
-    "assertions": ["RB01", "RB02", "RB03", "RB04", "Q12", "Q14"],
-    "scenario_ids": ["primary_gap_zero", "combined_gap_zero", "primary_gap_excluded", "combined_gap_excluded"],
-    "non_dominated_set_all_scenarios": ["V02", "V04", "V06", "V08"],
-    "dominance_edges_all_scenarios": 6,
-    "minimum_jaccard_to_central_primary": 1.0,
-    "numerical_sensitivity_executed": false
-  },
-  "numerical_ofat_sensitivity_gate": {
-    "status": "PASS",
-    "assertions": ["S01", "Q13", "S02", "S03", "S04", "Q14", "S05"],
-    "registered_endpoint_evaluations": 24,
-    "valid_changed_input_runs": 23,
-    "excluded_duplicate_endpoint": {
-      "run_id": "V_rec__low",
-      "value": 0.0,
-      "reason": "locked_endpoint_equals_central"
-    },
+  "pareto": {
     "central_non_dominated_set": ["V02", "V04", "V06", "V08"],
-    "only_changed_set_run": {
-      "run_id": "p_rev__low",
-      "non_dominated_set": ["V04", "V08"],
-      "jaccard_to_central": 0.5
-    },
-    "pareto_inclusion_counts": {
-      "denominator": 23,
-      "V01": 0,
-      "V02": 22,
-      "V03": 0,
-      "V04": 23,
-      "V05": 0,
-      "V06": 22,
-      "V07": 0,
-      "V08": 23
-    },
-    "break_even_executed": false
+    "central_dominance_edges": 6,
+    "numerical_ofat_valid_runs": 23,
+    "only_numerical_set_change": "p_rev__low",
+    "west_jaccard": 1.0,
+    "equal_temperature_non_dominated_set": ["V02", "V04"],
+    "equal_temperature_jaccard": 0.5
   },
-  "break_even_computation_gate": {
-    "status": "BLOCKED_LOCKED_SPEC_CLARIFICATION",
-    "computational_implementation": "PASS",
-    "assertions": ["BE01", "BE02", "BE03", "BE04", "BE05", "BE06", "BE07", "Q14"],
-    "maximum_premium_central_no_savings_fraction": 0.0,
-    "access_saving_locked_formula_aud_per_event": 14017.27206310166,
-    "access_saving_full_wlc_diagnostic_aud_per_event": 14886.976594658823,
-    "locked_access_formula_wlc_residual_aud": 1708.8980865952362,
+  "break_even": {
+    "approved_change_control": "CC-002 D1-B + D2-A + D3-A",
+    "primary_access_full_wlc_aud_per_event": 14886.976594658823,
+    "initial_premium_diagnostic_aud_per_event": 14017.27206310166,
+    "diagnostic_wlc_residual_aud": 1708.8980865952362,
     "service_life_all_four_pairs": "NO_BREAK_EVEN_LE_50_YEARS",
     "incremental_owner_recovery_threshold_aud_per_tonne": 18794.47552573408,
-    "locked_upper_owner_recovery_aud_per_tonne": 1130.0,
-    "discount_rate_primary_status": "LOCKED_PAIRWISE_COMPARISON_NOT_SPECIFIED",
-    "discount_rate_candidate_status_counts": {
-      "NO_SIGN_CHANGE_WITHIN_BOUND": 8,
-      "IDENTICALLY_EQUAL_WITHIN_TOLERANCE": 4
-    },
-    "final_break_even_csv_executed": false
+    "discount_rate_primary_pairs": 4,
+    "discount_rate_primary_status": "NO_SIGN_CHANGE_WITHIN_BOUND"
   },
-  "baseline_executed": false
+  "baseline": {
+    "status": "PASS",
+    "executed": true,
+    "parent_qa_checks": 58,
+    "table_and_manifest_outputs": 7,
+    "figure_outputs": 3,
+    "artifact_hashes_recorded": 9
+  }
 }

@@ -23,6 +23,7 @@ class QaContractTests(unittest.TestCase):
             "pareto.py",
             "break_even.py",
             "sensitivity.py",
+            "baseline.py",
         }
         self.assertTrue(required.issubset({path.name for path in (ROOT / "src").glob("*.py")}))
 
@@ -41,9 +42,24 @@ class QaContractTests(unittest.TestCase):
         self.assertEqual(steps[0], "load_and_validate_locked_inputs_and_manifest")
         self.assertEqual(steps[-1], "run_qa_then_export_tables_figures_and_manifest")
 
-    def test_simulation_is_disabled_for_milestone_01(self):
-        self.assertFalse(load_model()["simulation_enabled"])
-        for runner in ("run_baseline.py", "run_sensitivity.py", "run_break_even.py", "run_pareto.py"):
+    def test_baseline_is_enabled_only_after_cc002_and_all_gates(self):
+        model = load_model()
+        self.assertTrue(model["simulation_enabled"])
+        self.assertEqual(
+            model["status"],
+            "ALL_IMPLEMENTATION_GATES_PASSED_BASELINE_ENABLED",
+        )
+        self.assertEqual(
+            model["module_status"]["break_even"],
+            "gate_passed_cc002_d1_b_d2_a_d3_a",
+        )
+        self.assertEqual(
+            model["module_status"]["sensitivity"],
+            "numerical_ofat_and_energy_structural_gates_passed",
+        )
+
+    def test_unimplemented_standalone_exports_remain_fail_closed(self):
+        for runner in ("run_sensitivity.py", "run_break_even.py", "run_pareto.py"):
             completed = subprocess.run(
                 [sys.executable, str(ROOT / "analysis" / runner)],
                 cwd=ROOT,

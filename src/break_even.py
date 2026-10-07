@@ -103,42 +103,47 @@ class BreakEvenResult:
 @dataclass(frozen=True)
 class BreakEvenAnalysis:
     maximum_premium: tuple[BreakEvenResult, ...]
-    required_access_saving_locked_formula: tuple[BreakEvenResult, ...]
-    required_access_saving_wlc_diagnostic: tuple[BreakEvenResult, ...]
+    required_access_saving_primary_wlc: tuple[BreakEvenResult, ...]
+    required_access_saving_initial_premium_diagnostic: tuple[BreakEvenResult, ...]
     service_life: tuple[BreakEvenResult, ...]
     recovery_value: tuple[BreakEvenResult, ...]
-    discount_rate_primary: BreakEvenResult
+    discount_rate_primary: tuple[BreakEvenResult, ...]
     discount_rate_candidate_matrix: tuple[BreakEvenResult, ...]
-    locked_spec_mismatches: tuple[Mapping[str, Any], ...]
+    cc002_approval: tuple[Mapping[str, Any], ...]
+    open_locked_spec_issues: tuple[Mapping[str, Any], ...]
 
     def all_numeric_results(self) -> tuple[BreakEvenResult, ...]:
         return (
             self.maximum_premium
-            + self.required_access_saving_locked_formula
-            + self.required_access_saving_wlc_diagnostic
+            + self.required_access_saving_primary_wlc
+            + self.required_access_saving_initial_premium_diagnostic
             + self.service_life
             + self.recovery_value
+            + self.discount_rate_primary
             + self.discount_rate_candidate_matrix
         )
 
     def as_record(self) -> dict[str, Any]:
         return {
             "maximum_premium": [item.as_record() for item in self.maximum_premium],
-            "required_access_saving_locked_formula": [
+            "required_access_saving_primary_wlc": [
                 item.as_record()
-                for item in self.required_access_saving_locked_formula
+                for item in self.required_access_saving_primary_wlc
             ],
-            "required_access_saving_wlc_diagnostic": [
+            "required_access_saving_initial_premium_diagnostic": [
                 item.as_record()
-                for item in self.required_access_saving_wlc_diagnostic
+                for item in self.required_access_saving_initial_premium_diagnostic
             ],
             "service_life": [item.as_record() for item in self.service_life],
             "recovery_value": [item.as_record() for item in self.recovery_value],
-            "discount_rate_primary": self.discount_rate_primary.as_record(),
+            "discount_rate_primary": [
+                item.as_record() for item in self.discount_rate_primary
+            ],
             "discount_rate_candidate_matrix": [
                 item.as_record() for item in self.discount_rate_candidate_matrix
             ],
-            "locked_spec_mismatches": list(self.locked_spec_mismatches),
+            "cc002_approval": list(self.cc002_approval),
+            "open_locked_spec_issues": list(self.open_locked_spec_issues),
         }
 
 
@@ -308,7 +313,7 @@ def _access_saving_results(
     numerator = initial_premium - eol
     locked_value = 0.0 if numerator <= 0.0 else numerator / event_factor
     locked_status = "ZERO_THRESHOLD" if locked_value == 0.0 else "ROOT_FOUND"
-    locked_results: list[BreakEvenResult] = []
+    primary_results: list[BreakEvenResult] = []
     diagnostic_results: list[BreakEvenResult] = []
     for comparison_id, reversible, low in CONNECTION_PAIRS:
         wlc_delta = (
@@ -318,24 +323,24 @@ def _access_saving_results(
         wlc_value = max(0.0, (wlc_delta - eol) / event_factor)
         locked_residual = wlc_delta - eol - locked_value * event_factor
         diagnostic_residual = wlc_delta - eol - wlc_value * event_factor
-        locked_results.append(BreakEvenResult(
+        primary_results.append(BreakEvenResult(
             "BE_access", comparison_id, reversible, low,
-            "required_access_saving_locked_formula", "AUD/event",
-            locked_status, locked_value, 0.0, None, locked_residual,
-            "[A_BIPV*C_BIPV*p_rev - PV(EoL differential)]/[sum(f_fail/(1+r)^y)]",
-            "locked_central_premium_and_zero_eol_differential",
-            "This is the explicit Section 11.2 equation. Its WLC residual is retained because WLC also makes O&M proportional to premium-inclusive C0.",
-        ))
-        diagnostic_results.append(BreakEvenResult(
-            "BE_access_WLC_diagnostic", comparison_id, reversible, low,
             "required_access_saving_for_full_wlc_equality", "AUD/event",
             "ROOT_FOUND" if wlc_value > 0.0 else "ZERO_THRESHOLD",
             wlc_value, 0.0, None, diagnostic_residual,
             "[WLC_reversible - WLC_low - PV(EoL differential)]/[sum(f_fail/(1+r)^y)]",
-            "diagnostic_reconciliation_not_a_replacement_locked_formula",
-            "Reported to expose, not silently resolve, the locked access-formula/WLC inconsistency.",
+            "cc002_d1_b_primary_full_discounted_wlc_equality",
+            "CC-002 D1-B approved: this is the article-primary access/intervention threshold.",
         ))
-    return tuple(locked_results), tuple(diagnostic_results)
+        diagnostic_results.append(BreakEvenResult(
+            "BE_access_diagnostic", comparison_id, reversible, low,
+            "initial_premium_only_access_saving_diagnostic", "AUD/event",
+            locked_status, locked_value, 0.0, None, locked_residual,
+            "[A_BIPV*C_BIPV*p_rev - PV(EoL differential)]/[sum(f_fail/(1+r)^y)]",
+            "cc002_d1_b_retained_initial_premium_only_diagnostic",
+            "CC-002 D1-B retains the literal Section 11.2 value as a diagnostic, not complete WLC break-even.",
+        ))
+    return tuple(primary_results), tuple(diagnostic_results)
 
 
 def _service_life_results(
@@ -461,39 +466,46 @@ def run_break_even_analysis(
         variants, first_year_energy_kwh, parameters=lifecycle_base
     )
     central_costs = _costs_by_id(variants, central_lifecycle, cost_base)
-    access_locked, access_diagnostic = _access_saving_results(
+    access_primary, access_diagnostic = _access_saving_results(
         cost_base, lifecycle_base, central_costs
     )
-    primary_discount = BreakEvenResult(
-        "BE_r", "not_locked", None, None,
-        "real_discount_rate", "fraction",
-        "LOCKED_PAIRWISE_COMPARISON_NOT_SPECIFIED", None,
-        0.0, 0.15, None,
-        "WLC_A(r) - WLC_B(r) = 0",
-        "requires_selected_pairwise_comparison",
-        "The locked sources define the interval and equation but do not identify A and B; no pair is selected in code.",
+    discount_candidates = _discount_rate_candidate_results(
+        variants, central_lifecycle, cost_base
     )
-    mismatches = (
+    connection_ids = {item[0] for item in CONNECTION_PAIRS}
+    primary_discount = tuple(
+        replace(
+            item,
+            output_id="BE_r",
+            scenario="cc002_d2_a_all_matched_reversible_vs_low_pairs",
+            note=(
+                f"CC-002 D2-A approved. {item.note} No representative pair is privileged."
+            ),
+        )
+        for item in discount_candidates
+        if item.comparison_id in connection_ids
+    )
+    cc002_approval = (
         {
-            "id": "BE-M01",
-            "status": "MISMATCH",
-            "item": "The explicit BE_access numerator excludes the premium-driven O&M difference even though WLC defines O&M as m_OM*C0.",
+            "decision": "D1-B",
+            "status": "APPROVED_IMPLEMENTED",
+            "item": "Full discounted WLC equality is primary; the literal Section 11.2 value remains diagnostic.",
         },
         {
-            "id": "BE-M02",
-            "status": "BLOCKER",
-            "item": "BE_r requires a selected pairwise comparison, but no A/B pair is designated in the three locked sources.",
+            "decision": "D2-A",
+            "status": "APPROVED_IMPLEMENTED",
+            "item": "BE_r covers all four matched reversible/low pairs; no representative pair is selected.",
         },
         {
-            "id": "BE-M03",
-            "status": "MISMATCH",
-            "item": "Research Design v2.0 names an intervention-frequency threshold, while the Analysis Specification and Input Table define no corresponding output equation or scenario.",
+            "decision": "D3-A",
+            "status": "APPROVED_IMPLEMENTED",
+            "item": "Access/intervention saving per event is the threshold; failure frequency remains an OFAT input, not an independent threshold.",
         },
     )
     return BreakEvenAnalysis(
         maximum_premium=_maximum_premium_results(cost_base),
-        required_access_saving_locked_formula=access_locked,
-        required_access_saving_wlc_diagnostic=access_diagnostic,
+        required_access_saving_primary_wlc=access_primary,
+        required_access_saving_initial_premium_diagnostic=access_diagnostic,
         service_life=_service_life_results(
             variants,
             first_year_energy_kwh,
@@ -502,11 +514,10 @@ def run_break_even_analysis(
         ),
         recovery_value=_recovery_value_results(cost_base, central_costs),
         discount_rate_primary=primary_discount,
-        discount_rate_candidate_matrix=_discount_rate_candidate_results(
-            variants, central_lifecycle, cost_base
-        ),
-        locked_spec_mismatches=mismatches,
+        discount_rate_candidate_matrix=discount_candidates,
+        cc002_approval=cc002_approval,
+        open_locked_spec_issues=(),
     )
 
 
-IMPLEMENTATION_STATUS = "IMPLEMENTED_BLOCKED_BY_LOCKED_SPEC_CLARIFICATION"
+IMPLEMENTATION_STATUS = "IMPLEMENTED_BREAK_EVEN_GATE_PASSED"

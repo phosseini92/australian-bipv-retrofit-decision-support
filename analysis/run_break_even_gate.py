@@ -129,21 +129,24 @@ def main() -> int:
 
     analysis = run_break_even_analysis(first_year_energy, variants=variants)
     break_even_assertions = evaluate_break_even_assertions(analysis)
-    locked_access = analysis.required_access_saving_locked_formula[0].value
-    wlc_access = analysis.required_access_saving_wlc_diagnostic[0].value
+    primary_access = analysis.required_access_saving_primary_wlc[0].value
+    diagnostic_access = (
+        analysis.required_access_saving_initial_premium_diagnostic[0].value
+    )
     recovery = analysis.recovery_value[0].value
-    if locked_access is None or wlc_access is None or recovery is None:
+    if primary_access is None or diagnostic_access is None or recovery is None:
         raise AssertionError("expected computed break-even thresholds are missing")
 
     weather_manifest = load_weather_manifest()
     report: dict[str, Any] = {
         "schema_version": "1.0",
         "gate": "BREAK_EVEN",
-        "status": "BLOCKED_LOCKED_SPEC_CLARIFICATION",
+        "status": "PASS",
         "computational_implementation": "PASS",
         "baseline_executed": False,
         "final_break_even_csv_executed": False,
         "research_decision_added_in_code": False,
+        "approved_change_control": "CC-002 D1-B + D2-A + D3-A",
         "generated_at_utc": generated_at,
         "repository": repository,
         "controlled_weather": {
@@ -185,13 +188,17 @@ def main() -> int:
             "maximum_premium_central_no_savings_fraction": (
                 analysis.maximum_premium[0].value
             ),
-            "access_saving_locked_formula_aud_per_event": locked_access,
-            "access_saving_full_wlc_diagnostic_aud_per_event": wlc_access,
-            "access_threshold_difference_aud_per_event": (
-                wlc_access - locked_access
+            "access_saving_primary_full_wlc_aud_per_event": primary_access,
+            "access_saving_initial_premium_diagnostic_aud_per_event": (
+                diagnostic_access
             ),
-            "locked_access_formula_wlc_residual_aud": (
-                analysis.required_access_saving_locked_formula[0].residual
+            "access_threshold_difference_aud_per_event": (
+                primary_access - diagnostic_access
+            ),
+            "diagnostic_access_formula_wlc_residual_aud": (
+                analysis
+                .required_access_saving_initial_premium_diagnostic[0]
+                .residual
             ),
             "service_life_result_all_four_pairs": (
                 "NO_BREAK_EVEN_LE_50_YEARS"
@@ -203,11 +210,13 @@ def main() -> int:
             "recovery_threshold_multiple_of_locked_upper": (
                 recovery / float(rows["V_rec"].high)
             ),
-            "discount_rate_primary_status": (
-                analysis.discount_rate_primary.status
-            ),
+            "discount_rate_primary_comparisons": {
+                item.comparison_id: item.status
+                for item in analysis.discount_rate_primary
+            },
         },
-        "locked_spec_disposition": list(analysis.locked_spec_mismatches),
+        "cc002_disposition": list(analysis.cc002_approval),
+        "open_locked_spec_issues": list(analysis.open_locked_spec_issues),
         "parent_energy_assertions": qa_results_as_dicts(energy_assertions),
         "parent_lifecycle_assertions": lifecycle_qa_as_dicts(
             lifecycle_assertions
@@ -220,10 +229,10 @@ def main() -> int:
             break_even_assertions
         ),
         "scope_note": (
-            "Computable locked thresholds and every explicit non-root status "
-            "are reported. The final break_even.csv and formal baseline remain "
-            "disabled because the locked access equation conflicts with full "
-            "WLC bookkeeping and no BE_r A/B pair is designated."
+            "CC-002 D1-B + D2-A + D3-A is fully implemented. Computed "
+            "thresholds and every explicit non-root status are reported. This "
+            "controlled Gate emits no final break_even.csv or formal baseline; "
+            "those remain downstream export-stage actions."
         ),
     }
     deterministic_payload = json.loads(json.dumps(report, ensure_ascii=False))
@@ -244,11 +253,14 @@ def main() -> int:
         "status": report["status"],
         "computational_implementation": "PASS",
         "output": str(args.output),
-        "access_locked_formula_aud_per_event": locked_access,
-        "access_wlc_diagnostic_aud_per_event": wlc_access,
+        "access_primary_full_wlc_aud_per_event": primary_access,
+        "access_initial_premium_diagnostic_aud_per_event": diagnostic_access,
         "service_life": "no break-even <=50 years",
         "recovery_threshold_aud_per_tonne": recovery,
-        "discount_rate_primary": analysis.discount_rate_primary.status,
+        "discount_rate_primary": {
+            item.comparison_id: item.status
+            for item in analysis.discount_rate_primary
+        },
         "assertions": [item.id for item in break_even_assertions],
     }, indent=2, ensure_ascii=False))
     return 0

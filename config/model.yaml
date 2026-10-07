@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "status": "BREAK_EVEN_COMPUTATION_COMPLETE_LOCK_CLARIFICATION_REQUIRED",
-  "simulation_enabled": false,
+  "status": "ALL_IMPLEMENTATION_GATES_PASSED_BASELINE_ENABLED",
+  "simulation_enabled": true,
   "module_status": {
     "weather": "controlled_epw_validated",
     "irradiance": "controlled_epw_integration_passed",
@@ -15,8 +15,9 @@
     "lifecycle_cost": "integration_gate_passed",
     "circularity": "item_level_evidence_gate_passed",
     "pareto": "primary_and_structural_robustness_gates_passed",
-    "sensitivity": "numerical_ofat_gate_passed",
-    "break_even": "implemented_blocked_by_locked_spec_clarification"
+    "sensitivity": "numerical_ofat_and_energy_structural_gates_passed",
+    "break_even": "gate_passed_cc002_d1_b_d2_a_d3_a",
+    "baseline": "enabled_after_all_gates_passed"
   },
   "input_source": "data/inputs/source_manifest.yaml",
   "invariants": {

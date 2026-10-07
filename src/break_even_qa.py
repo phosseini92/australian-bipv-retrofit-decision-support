@@ -22,8 +22,8 @@ def evaluate_break_even_assertions(
 
     pair_ok = (
         len(analysis.maximum_premium) == len(CONNECTION_PAIRS) == 4
-        and len(analysis.required_access_saving_locked_formula) == 4
-        and len(analysis.required_access_saving_wlc_diagnostic) == 4
+        and len(analysis.required_access_saving_primary_wlc) == 4
+        and len(analysis.required_access_saving_initial_premium_diagnostic) == 4
         and len(analysis.service_life) == len(MOUNTING_PAIRS) == 4
         and len(analysis.recovery_value) == 4
         and len(analysis.discount_rate_candidate_matrix)
@@ -45,22 +45,25 @@ def evaluate_break_even_assertions(
         "The explicit maximum-premium equation returns zero under the central scenario because no downstream monetary saving is asserted.",
     ))
 
-    locked_access = analysis.required_access_saving_locked_formula
-    wlc_access = analysis.required_access_saving_wlc_diagnostic
+    primary_access = analysis.required_access_saving_primary_wlc
+    diagnostic_access = (
+        analysis.required_access_saving_initial_premium_diagnostic
+    )
     access_ok = all(
-        locked.value is not None
+        primary.value is not None
         and diagnostic.value is not None
-        and locked.value > 0.0
-        and diagnostic.value > locked.value
-        and locked.residual is not None
-        and locked.residual > 0.0
+        and primary.value > diagnostic.value > 0.0
+        and primary.residual is not None
+        and math.isclose(primary.residual, 0.0, abs_tol=1e-8)
         and diagnostic.residual is not None
-        and math.isclose(diagnostic.residual, 0.0, abs_tol=1e-8)
-        for locked, diagnostic in zip(locked_access, wlc_access)
+        and diagnostic.residual > 0.0
+        and primary.scenario
+        == "cc002_d1_b_primary_full_discounted_wlc_equality"
+        for primary, diagnostic in zip(primary_access, diagnostic_access)
     )
     qa.append(QaResult(
         "BE03", "PASS" if access_ok else "FAIL",
-        "Both the explicit Section 11.2 access threshold and the full-WLC reconciliation diagnostic are preserved; their non-zero difference exposes the locked formula mismatch.",
+        "CC-002 D1-B is enforced: full-WLC equality is primary and the lower initial-premium-only Section 11.2 value remains a labelled diagnostic.",
     ))
 
     life_ok = all(
@@ -90,29 +93,38 @@ def evaluate_break_even_assertions(
         "Incremental owner-recovery thresholds reproduce WLC equality for all matched connection pairs and remain explicitly scenario-qualified.",
     ))
 
-    rate_statuses = [
-        item.status for item in analysis.discount_rate_candidate_matrix
-    ]
+    rate_statuses = [item.status for item in analysis.discount_rate_candidate_matrix]
     rate_ok = (
-        analysis.discount_rate_primary.status
-        == "LOCKED_PAIRWISE_COMPARISON_NOT_SPECIFIED"
+        len(analysis.discount_rate_primary) == 4
+        and tuple(item.comparison_id for item in analysis.discount_rate_primary)
+        == tuple(item[0] for item in CONNECTION_PAIRS)
+        and all(
+            item.status == "NO_SIGN_CHANGE_WITHIN_BOUND"
+            and item.value is None
+            and item.scenario
+            == "cc002_d2_a_all_matched_reversible_vs_low_pairs"
+            for item in analysis.discount_rate_primary
+        )
         and rate_statuses.count("NO_SIGN_CHANGE_WITHIN_BOUND") == 8
         and rate_statuses.count("IDENTICALLY_EQUAL_WITHIN_TOLERANCE") == 4
     )
     qa.append(QaResult(
         "BE06", "PASS" if rate_ok else "FAIL",
-        "The missing locked BE_r pair is not invented. Candidate one-factor contrasts explicitly report eight no-sign-change cases and four all-rate ties over 0–15%.",
+        "CC-002 D2-A is enforced: all four matched reversible/low pairs are primary BE_r comparisons and each explicitly has no root over 0–15%; no pair is privileged.",
     ))
 
-    mismatches_ok = (
-        [item["id"] for item in analysis.locked_spec_mismatches]
-        == ["BE-M01", "BE-M02", "BE-M03"]
-        and [item["status"] for item in analysis.locked_spec_mismatches]
-        == ["MISMATCH", "BLOCKER", "MISMATCH"]
+    approval_ok = (
+        [item["decision"] for item in analysis.cc002_approval]
+        == ["D1-B", "D2-A", "D3-A"]
+        and all(
+            item["status"] == "APPROVED_IMPLEMENTED"
+            for item in analysis.cc002_approval
+        )
+        and not analysis.open_locked_spec_issues
     )
     qa.append(QaResult(
-        "BE07", "PASS" if mismatches_ok else "FAIL",
-        "The access-formula/WLC inconsistency, absent selected discount-rate pair, and cross-document intervention-frequency omission are explicit; none is silently resolved in code.",
+        "BE07", "PASS" if approval_ok else "FAIL",
+        "CC-002 approval D1-B + D2-A + D3-A is recorded and implemented with no remaining locked-source Break-even issue.",
     ))
 
     finite_ok = True
@@ -128,8 +140,10 @@ def evaluate_break_even_assertions(
                 "NO_SIGN_CHANGE_WITHIN_BOUND",
                 "IDENTICALLY_EQUAL_WITHIN_TOLERANCE",
             }
-    finite_ok &= analysis.discount_rate_primary.value is None
-    finite_ok &= bool(analysis.discount_rate_primary.status)
+    finite_ok &= all(
+        item.value is None and bool(item.status)
+        for item in analysis.discount_rate_primary
+    )
     qa.append(QaResult(
         "Q14", "PASS" if finite_ok else "FAIL",
         "All numeric break-even outputs are finite; absent and non-unique roots use explicit status strings and null values rather than NaN/Inf.",
@@ -147,4 +161,4 @@ def break_even_qa_as_dicts(
     return [asdict(item) for item in results]
 
 
-IMPLEMENTATION_STATUS = "IMPLEMENTED_BLOCKED_BY_LOCKED_SPEC_CLARIFICATION"
+IMPLEMENTATION_STATUS = "IMPLEMENTED_BREAK_EVEN_GATE_PASSED"

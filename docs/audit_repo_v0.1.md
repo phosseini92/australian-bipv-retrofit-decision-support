@@ -1,48 +1,25 @@
-# Formal Audit — Repo v0.1 through Break-even Computation Gate
+# Formal Audit — Repo v0.1 through Baseline Execution
 
 Audit date: 2026-10-07
-Audit scope: repository structure, controlled inputs, locked variant/design
-contract, QA registration, energy, lifecycle-energy, cost, PSCF-informed
-evidence, Pareto, numerical OFAT, and break-even implementation, and readiness
-to run.
-Decision rule: `PASS` means evidence satisfies the locked contract;
-`MISMATCH` means a non-scientific repository/release gap exists; `BLOCKER`
-means execution cannot safely proceed.
+Decision rule: `PASS` means the evidence satisfies the controlled contract;
+`MISMATCH` is a disclosed reproducibility/release limitation that does not alter
+the model; `BLOCKER` means execution cannot safely proceed.
 
 ## Executive disposition
 
-- Computational-contract conformity: **PASS** — no new research assumption or
-  silent change to a locked input, equation, variant, decision rule, or output
-  contract was identified. One weather evidence-description mismatch is
-  disclosed separately.
-- Repo v0.1 skeleton gate: **PASS**.
-- Energy implementation gate: **PASS** — controlled EPW integration and Q01–Q05
-  pass.
-- Lifecycle-energy gate: **PASS** — locked degradation, availability,
-  intervention-burden, and scheduled-year equations pass their scoped QA.
-- Lifecycle-cost gate: **PASS** — locked initial, recurring, corrective,
-  inverter, EoL, discounting, WLC, and cost-intensity equations pass.
-- PSCF-informed Evidence Gate: **PASS** — item-level evidence coding, central
-  dimensions, GAP-excluded robustness, and Q11/Q14 pass.
-- Central primary Pareto Gate: **PASS** — raw seven-criterion dominance,
-  pairwise QA, and Q12/Q14 pass without weights or normalization.
-- Pareto structural robustness gate: **PASS** — primary/combined-CIRC ×
-  GAP-zero/excluded set comparison and robustness QA pass.
-- Numerical OFAT Sensitivity Gate: **PASS** — all 24 registered endpoint
-  evaluations execute; 23 valid changed-input runs pass Q13 and stability QA.
-  The locked `V_rec` low/central duplicate is disclosed as a mismatch and is
-  excluded from the valid-run denominator.
-- Break-even computational implementation: **PASS** — premium, access,
-  service-life, recovery, and bounded discount-rate computations pass formula,
-  pairing, finite-value, and explicit-non-root QA.
-- Break-even Gate approval: **BLOCKED** — the locked sources must clarify the
-  access-equation/WLC inconsistency and designate the primary discount-rate
-  pair. No research choice was inserted in code.
-- Baseline-execution gate: **BLOCKED** — no baseline was run.
-- Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
-  repository metadata remain unresolved.
+- Computational-contract conformity: **PASS**.
+- Repo v0.1 skeleton and locked-input transfer: **PASS**.
+- Energy, lifecycle-energy, lifecycle-cost, PSCF-informed evidence, central
+  Pareto, circularity/GAP robustness, and numerical OFAT Gates: **PASS**.
+- Energy structural-sensitivity Gate: **PASS** for west orientation and the
+  equal-temperature control.
+- Break-even Gate: **PASS** under approved `CC-002 D1-B + D2-A + D3-A`.
+- Formal baseline execution: **PASS**; all seven table/manifest outputs and all
+  three required figures were exported after 58 parent-gate QA checks passed.
+- Public GitHub release: **HOLD** pending license, author/citation metadata, and
+  remote/release setup. This is not a scientific-computation blocker.
 
-Summary: **75 PASS / 8 MISMATCH / 1 BLOCKER** across 84 checks.
+Summary: **87 PASS / 6 MISMATCH / 0 BLOCKER** across 93 checks.
 
 ## Controlled-source evidence
 
@@ -53,135 +30,82 @@ Summary: **75 PASS / 8 MISMATCH / 1 BLOCKER** across 84 checks.
 | `APSRC_Analysis_Specification_v1.0_LOCK.docx` | `3891f04ea97b49bb546a78e3537fb64fd3cfbe12360f4c8c6506e049d8028e67` |
 | `AUS_VIC_Melbourne.RO.948680_TMYx.2011-2025.epw` | `8b58f95a7cbecc131d6dfe1304579399fa947ba2d21015e8565566e2932fcb1e` |
 
-These digests match `data/inputs/source_manifest.yaml` and the independently
-recomputed hashes of the three supplied files.
+## Gate register
 
-## Finding register
+| ID | Status | Requirement / result |
+|---|---|---|
+| A01 | PASS | All three locked source identities and hashes match the manifest. |
+| A02 | PASS | Word sources were readable/renderable and workbook blocks A–F plus Sources Register were transferred with sheet/row provenance. |
+| A03 | PASS | Formula text, cached values, statuses, blank endpoints, and source locators are preserved. |
+| A04 | MISMATCH | Original controlled Office binaries are not vendored; hashes and locators are present, so computation is controlled but the repository is not a self-contained source archive. |
+| R01 | PASS | Required repository boundaries, eight variants, schemas, execution order, QA registry, and output names are present. |
+| R02 | PASS | V01–V08 are the exact 2×2×2 mounting/connection/replacement-scope factorial. |
+| R03 | PASS | No missing value is silently converted to a default or zero. |
+| E01–E13 | PASS | Exact EPW validation, Perez-Driesse POA, physical/Marion IAM, SAPM temperature, PVWatts DC/inverter, clipping, loss ordering, E1 integration, factor isolation, and Q01–Q05 pass. |
+| E14 | MISMATCH | The nominal package name says 2011–2025, while the EPW header reports usable station years 2011–2015. `CC-001` preserves the exact file and discloses this evidence-period limitation. |
+| L01–L08 | PASS | Linear degradation, expected-event availability, one permanently replaced product/event, handled scope, burden, scheduled inverter years, and lifecycle QA pass. |
+| K01–K08 | PASS | Initial, O&M, corrective, inverter, EoL, discounting, WLC, and cost-intensity bookkeeping reconcile without transport double counting. |
+| P01–P06 | PASS | Item-level evidence coding, locked M/I/C values, GAP exclusion, explicit constraints, combined CIRC arithmetic, Q11, and Q14 pass. |
+| PA01–PA06 | PASS | Raw seven-criterion primary dominance uses no weights/normalization; the central set is V02/V04/V06/V08 with six verified dominance edges. |
+| PR01–PR06 | PASS | Primary/combined-CIRC × GAP-zero/excluded robustness keeps the central set and edges in all four scenarios (`Jaccard=1.0`). |
+| NS01–NS05, NS07 | PASS | All 24 registered numerical endpoints execute; 23 valid changed-input runs satisfy OFAT isolation and manifest rules. |
+| NS06 | MISMATCH | Locked `V_rec` low equals central zero. It is retained in provenance and excluded from the 23-run changed-input denominator; no value is invented. |
+| ES01–ES06 | PASS | West orientation and equal-temperature control execute from the structural registry with complete variant metrics and hard-fail QA. West retains V02/V04/V06/V08 (`Jaccard=1.0`); equal temperature yields V02/V04 (`Jaccard=0.5`). |
+| BE01–BE08 | PASS | All five break-even families, pair symmetry, bounds, residuals, and explicit non-root statuses pass after `CC-002`. |
+| CC02-1 | PASS | D1-B makes full discounted WLC equality primary: `BE_access = A$14,886.98/event`; `A$14,017.27/event` remains the initial-premium diagnostic. |
+| CC02-2 | PASS | D2-A evaluates all four reversible/low pairs for primary `BE_r`; all report no sign change over 0–15% real. |
+| CC02-3 | PASS | D3-A retains intervention frequency as the `λ_mod`/`f_fail` OFAT input and does not invent a separate threshold. |
+| V01 | PASS | Direct dependencies are pinned, including Matplotlib 3.11.2 for the locked figure outputs. |
+| V02 | PASS | **129 automated tests pass** with zero failures/errors. |
+| BL01 | PASS | Baseline is enabled only after all implementation Gates and `CC-002` pass. |
+| BL02 | PASS | `variant_central.csv`, `factor_contrasts.csv`, `sensitivity_runs.csv`, `pareto_primary.csv`, `pareto_robustness.csv`, `break_even.csv`, `run_manifest.json`, and three locked PNG figures are exported. |
+| BL03 | PASS | Export is staged before replacement; the manifest records source/weather/runtime provenance, all parent QA results, and SHA-256 for the nine table/figure artifacts. |
+| G01 | MISMATCH | `LICENSE` remains an all-rights-reserved placeholder; a public license has not been selected. |
+| G02 | MISMATCH | `CITATION.cff` still lacks author/ORCID and release identifier metadata. |
+| G03 | MISMATCH | No GitHub remote, tag, or public release exists yet. |
 
-| ID | Status | Requirement / check | Evidence and disposition |
-|---|---|---|---|
-| A01 | PASS | Controlled source identity | All three supplied filenames and SHA-256 digests match the source manifest. |
-| A02 | PASS | Word-source readability and layout | Both locked Word files were extracted and rendered page-by-page without an unreadable page or broken table. |
-| A03 | PASS | Workbook-to-machine-readable transfer | Blocks A–F and the Sources Register are exported as CSV with workbook sheet/row locators. Export hashes and expected row counts pass tests. |
-| A04 | MISMATCH | Self-contained source archive | The original controlled binaries and EPW are not vendored. Hashes, row locators, and the weather retrieval URL are present, but a third party must obtain the external files for a fully independent audit. This does not change the research model. |
-| R01 | PASS | Target repository structure | Required `config`, `data`, `src`, `analysis`, `tests`, `outputs`, and `docs` boundaries exist. Extra files are audit/configuration support only. |
-| R02 | PASS | Exact eight-variant factorial | V01–V08 codes and the 2×2×2 mounting/connection/replacement-scope mapping match the locked specification, with no duplicate combination. |
-| R03 | PASS | Input schema | Required columns, allowed statuses, non-empty provenance fields, and row locators are validated. |
-| R04 | PASS | Formula and cached-value preservation | Every exported workbook formula has a cached machine-readable value; formula text is retained rather than re-derived in code. |
-| R05 | PASS | Mandatory execution order | All 16 locked steps are present in the specified order. |
-| R06 | PASS | Sensitivity contract | OFAT and structural-test cases are registered separately; central/low/high values remain sourced from the locked snapshot. |
-| R07 | PASS | Q01–Q14 registration | All 14 assertion IDs are present with hard-fail policy. |
-| R08 | PASS | Fail-closed final analysis entry points | Baseline, sensitivity, break-even, and final Pareto runners exit non-zero while downstream gates remain open. Separate controlled gate runners do not emit the locked final baseline outputs. |
-| R09 | PASS | Locked output contract | All seven CSV/JSON tables and three figure filenames are registered; no simulation output is present. |
-| E01 | PASS | Locked EPW identity and validation code | Loader enforces exact filename, SHA-256, byte size, station metadata, 8,760 unique rows, source-year map, non-leap calendar positions, and required weather fields. Negative irradiance is clipped only as specified. |
-| E02 | PASS | Controlled EPW presence and provenance | The local controlled EPW matches SHA-256 `8b58f95…fcb1e`. Mixed historical years are normalised under approved `CC-001`; all original timestamps and row order are retained for audit. |
-| E03 | PASS | Solar geometry and Perez-Driesse | Solar zenith/azimuth, extraterrestrial DNI, and relative airmass feed `get_total_irradiance(model="perez-driesse")`. |
-| E04 | PASS | POA audit components | Direct, sky-diffuse, ground-diffuse, and global POA components are retained. |
-| E05 | PASS | Locked IAM treatment | Physical beam IAM uses `n=1.526`, `K=4 m⁻¹`, `L=0.0025 m`; Marion diffuse IAM applies separate sky and ground modifiers at the locked tilt. Values are loaded from controlled inputs. |
-| E06 | PASS | No spectral correction | No spectral multiplier is introduced. |
-| E07 | PASS | Mounting-specific SAPM temperature | Locked named presets `close_mount_glass_glass` and `open_rack_glass_glass` are resolved from pinned pvlib; the structural control is the hourly arithmetic mean. |
-| E08 | PASS | PVWatts DC and loss ordering | Effective irradiance enters PVWatts DC; `Pdc0`, `γPmax`, and 25°C reference are applied; the locked multiplicative `L_sys` is applied afterwards. |
-| E09 | PASS | PVWatts inverter convention | Inverter DC input limit is `Pac0 / ηinv,nom`; AC output is constrained to 150 kW and clipped non-negative. |
-| E10 | PASS | Year-one integration | AC energy is integrated as `sum(P_AC,W × Δt_h) / 1000`, before lifecycle failure downtime. |
-| E11 | PASS | Factor isolation in energy API | Energy execution accepts mounting and orientation only; connection and replacement scope cannot alter electrical calculations. Common capacities and loss inputs come from one locked parameter object. |
-| E12 | PASS | Q05 unit behaviour | Synthetic boundary tests confirm non-negative energy terms and AC clipping at the configured rating. Test fixtures are not study inputs. |
-| E13 | PASS | Controlled-file Q01–Q05 evaluation | All five energy assertions pass. Direct E1 is 161,751.981 kWh; ventilated E1 is 166,904.081 kWh; maximum AC powers are 115.300 and 122.769 kW respectively. |
-| E14 | MISMATCH | Weather evidence-period description | The locked filename and input rationale imply a 2011–2025 15-year typical-year basis, while the EPW header reports only five available station years, 2011–2015. The exact locked file is retained, and the limitation is disclosed in `CC-001` and all gate manifests. |
-| L01 | PASS | Locked lifecycle input binding | `T`, `d`, `N_mod,eq`, `λ_mod`, `DT_event`, handled/replaced scopes, disturbed areas, `k_rev,time`, and inverter service life are read from the controlled snapshot without defaults. |
-| L02 | PASS | Derived failure consistency | The implementation recomputes `f_fail = N_mod,eq × λ_mod` and `N_fail(T) = f_fail × T`, hard-failing if they differ from the locked cached workbook values. |
-| L03 | PASS | Linear degradation | Every annual factor uses `max(0, 1 - d×(y-1))`; year 1 is unchanged and no compound recursion or second LID deduction is present. |
-| L04 | PASS | Expected availability | Availability uses the locked failure rate, downtime, disturbed-area fraction, 8,760-hour denominator, clipping, and energy-weighted lifetime ratio. It remains separate from `L_sys`. |
-| L05 | PASS | Intervention and material burden | Cumulative disturbed area and handled scope follow the locked equations. Exactly one failed product is replaced per event; adjacent assembly products do not inflate replacement mass. The 25.5-kg unit mass is recovered exactly from locked `M_EOL × 1000 / N_mod,eq`. |
-| L06 | PASS | Scheduled inverter years | Service-life multiples strictly within the horizon reproduce the locked cases: year 15 for T=25/30 and years 15 and 30 for T=35. The common monetary allowance is verified in K05. |
-| L07 | PASS | Controlled lifecycle-energy integration | All eight variants produce finite, non-negative 30-year metrics. Scoped Q04, Q06–Q09, and Q14 checks pass; connection has no assumed time benefit, and replacement scope affects net energy only through disturbed-area availability. |
-| K01 | PASS | Locked cost input binding | Currency basis, horizon, discount rate, mounting and reversibility costs, O&M, corrective material, inverter, recycling, recovery, and EoL rules are loaded from the controlled snapshot without numeric defaults. |
-| K02 | PASS | Cached cost derivations | `C_direct`, `C_vent`, `ΔC_rev`, cached O&M values, failed-product material cost, recycling decomposition, and owner recovery are independently recomputed and hard-fail on mismatch. |
-| K03 | PASS | Initial and O&M cost | Each variant follows `C0 = A_BIPV × C_mount + C_rev`; annual O&M is `m_OM × C0`. The 5% reversibility premium remains visibly tagged as a structural-test point. |
-| K04 | PASS | Corrective replacement bookkeeping | Expected annual material cost is `f_fail × C_rep,mat`. Exactly one failed product is costed per event, adjacent assembly products add zero material cost, and unsupported access tariffs remain excluded from central WLC. |
-| K05 | PASS | Common inverter allowance | `C_inv,ref = p_invrep × (A_BIPV × C_BIPV)` is independent of mounting and reversibility premiums. Its nominal amount, year-15 schedule, and discounted PV are identical across V01–V08, closing Q08 for the cost gate. |
-| K06 | PASS | End-of-life accounting | Central owner recovery is zero. EoL removal remains a break-even/stress variable. The transport component plus processing component reconciles to the all-in recycling fee and is not added a second time. |
-| K07 | PASS | Discounted WLC and cost intensity | End-of-year recurring costs, scheduled inverter replacement, and terminal EoL cost reconcile to component present values and WLC. `CostIntensity = WLC/E_life`; electricity revenue is not inserted into WLC. |
-| K08 | PASS | Controlled cost integration | All eight variants produce finite, non-negative cost outputs. Internal C01–C04 and formal Q08–Q10/Q14 checks pass. Replacement scope creates no unsupported central WLC difference. |
-| P01 | PASS | PSCF method boundary | The published PSCF remains qualitative. Repository outputs use the locked label “PSCF-informed evidence-readiness” and do not present the study-specific code as a native PSCF score. |
-| P02 | PASS | Item-level evidence registry | All 13 mechanistic, institutional, and contextual items retain value, evidence state, input status, source ID, sheet, and row provenance. Variant factors affect only `M_REV` and `M_REP`. |
-| P03 | PASS | Central dimension reconciliation | Item arithmetic reproduces locked M profiles 0.25/0.50/0.50/0.75, common I=0.70, common C=0.50, and combined values 0.4833/0.5667/0.5667/0.65. |
-| P04 | PASS | GAP structural treatment | `M_DFD_DOC` and `I_TAKE` are the only excluded GAP items. Dimensions are recomputed from item labels; `C_LOG` remains an explicit zero constraint in the contextual denominator. |
-| P05 | PASS | Factor isolation | Institutional and contextual dimensions are identical across V01–V08; direct versus ventilated mounting produces no evidence-readiness difference. Q11 passes. |
-| P06 | PASS | Evidence numerical integrity | Central and GAP-excluded M/I/C/combined values are finite and bounded in [0,1]. The combined structural criterion is an unweighted arithmetic mean. Q14 passes. |
-| PA01 | PASS | Locked primary vector | `E_life`, `A_life`, `WLC`, `B_dist`, `M`, `I`, and `C` are evaluated in their locked directions. Institutional and contextual values remain constant and are not fabricated. |
-| PA02 | PASS | Dominance rule | A variant must be no worse on every raw criterion and strictly better on at least one. The only tolerance is eight machine ULPs for floating-point noise. |
-| PA03 | PASS | No preference transformation | No weighting, normalization, composite score, or practical-equivalence band is used. Q12 passes. |
-| PA04 | PASS | Dominance graph | Six directed dominance edges are reproduced: V02→V01/V03, V04→V03, V06→V05/V07, and V08→V07. The graph is irreflexive and asymmetric. |
-| PA05 | PASS | Central non-dominated set | The primary central set is V02, V04, V06, and V08. Each remaining assembly-level variant has at least one valid incoming dominance edge. |
-| PA06 | PASS | Central-gate scope isolation | The central-primary runner itself emits no structural, OFAT, break-even, final CSV, or figure output. Structural robustness is executed only by the separate controlled gate below. All central raw metrics are finite; Q14 passes. |
-| PR01 | PASS | Structural-run contract | The full primary/combined-CIRC × GAP-zero/excluded matrix is executed from the two locked named structural runs, including their joint condition. |
-| PR02 | PASS | Criterion replacement | Combined runs replace exactly M/I/C with CIRC; E_life, A_life, WLC, and B_dist remain unchanged and raw. |
-| PR03 | PASS | GAP isolation | GAP exclusion changes only item-derived evidence dimensions. Non-evidence metrics remain bit-identical, and CIRC is recomputed as the unweighted M/I/C mean. |
-| PR04 | PASS | Set stability | All four scenarios retain V02/V04/V06/V08. Every Jaccard similarity to central-primary is 1.0. |
-| PR05 | PASS | Graph stability | All scenarios retain the same six dominance edges; no edge is created or removed by criterion representation or GAP treatment. |
-| PR06 | PASS | Robustness scope | Q12 and Q14 pass. No numerical OFAT sensitivity, inclusion frequency, break-even, final baseline output, or figure is produced. |
-| NS01 | PASS | Numerical OFAT registration | Two low/high endpoints execute for each of the 12 locked numerical inputs, in the registered order, for 24 endpoint evaluations. Numerical and structural cases remain separated. |
-| NS02 | PASS | Dependent-value propagation | Changes to service life, failure rate, handled assembly scope, mounting cost, O&M, premiums, discounting, recycling, and recovery recompute all affected lifecycle/cost quantities before dominance analysis. Service-life cases use T=25/35 without artificial module replacement and retain the locked inverter-year rule. |
-| NS03 | PASS | One-factor isolation | All 23 valid changed-input runs differ from central in exactly one registered numerical input. Q13 hard-fails any unregistered or multi-input change. |
-| NS04 | PASS | Run manifests and numerical integrity | Every endpoint records parameter, workbook sheet/row, value, V01–V08 set, code version, timestamp, validity, and exclusion reason. All 192 variant-endpoint metric rows and stability values are finite; Q14 passes. |
-| NS05 | PASS | Pareto stability result | Central V02/V04/V06/V08 is retained in 22/23 valid runs. Only `p_rev=0` changes the set to V04/V08, with Jaccard 0.5. Inclusion counts are V04=23, V08=23, V02=22, V06=22, and zero for V01/V03/V05/V07. Frequencies are robustness summaries, not probabilities. |
-| NS06 | MISMATCH | Duplicate locked endpoint | `V_rec` low and central are both zero in the controlled input table. The low endpoint is executed and preserved in provenance but cannot satisfy Q13 as a changed-input run, so it is explicitly flagged `locked_endpoint_equals_central` and excluded from the 23-run denominator. No value is invented to force a change. |
-| NS07 | PASS | Sensitivity-gate scope | This gate emits no structural sensitivity case, break-even result, locked final baseline CSV, figure, or formal baseline. The guarded final runners remain closed. |
-| BE01 | PASS | Break-even comparison contract | All four locked reversible/low pairs and all four locked ventilated/direct pairs execute. The discount diagnostic covers all 12 matched one-factor contrasts without choosing a preferred pair. |
-| BE02 | PASS | Maximum premium | With no centrally asserted downstream monetary saving, the explicit `p_rev,max = PV(savings)/(A_BIPV×C_BIPV)` threshold is zero for all four connection pairs. This is a scenario result, not a claim of no non-monetised benefit. |
-| BE03 | PASS | Access threshold calculations | The explicit Section 11.2 equation yields A$14,017.27/event. A separately labelled full-WLC reconciliation yields A$14,886.98/event and zero residual. Both are retained; neither silently replaces the other. |
-| BE04 | PASS | Service-life threshold | Every matched ventilated/direct contrast searches each integer T from 10 to 50 with locked 15-year inverter intervals. None reaches `WLC_vent/E_vent ≤ WLC_direct/E_direct`; every non-root is explicit. |
-| BE05 | PASS | Recovery-value threshold | Full-WLC equality requires an incremental owner recovery credit of A$18,794.48/t for each matched reversible/low pair under the specified zero-other-savings scenario. This is 16.63× the locked A$1,130/t upper value and is not presented as a market observation. |
-| BE06 | PASS | Discount-rate diagnostics | Over 0–15% real, eight connection/mounting contrasts have no sign change and four replacement-scope WLC contrasts are tied at all tested rates. No candidate is silently promoted to the unspecified primary `BE_r` comparison. |
-| BE07 | PASS | Numerical/root integrity | All computed thresholds, bounds, residuals, and endpoint deltas are finite. Non-existent and non-unique roots use explicit status plus null value; Q14 passes. |
-| BE08 | PASS | Break-even scope isolation | The controlled runner emits audit evidence only. It does not create the locked final `break_even.csv`, a break-even figure, or the formal baseline while source clarification is outstanding. |
-| BE-M01 | MISMATCH | Access equation versus WLC | Section 11.2 uses only the initial premium in the access-threshold numerator, but Section 6 defines O&M as `m_OM×C0` with premium included in `C0`. The explicit threshold leaves a A$1,708.90 WLC residual. A controlled-source choice is required before one value is article-primary. |
-| BE-M03 | MISMATCH | Intervention-frequency output | Research Design v2.0 names an intervention-frequency threshold, while Analysis Specification v1.0 and Input Table v1.0 F define neither a corresponding primary output equation nor a scenario. No threshold was invented. |
-| V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 117 tests pass: input integrity, variant matrix, energy/lifecycle/cost/evidence/Pareto/sensitivity/break-even contracts, item-level GAP handling, raw and structural dominance behaviour, OFAT isolation/derivations, root and non-root handling, Q01–Q14 registration, fail-closed final runners, controlled EPW validation, and all implemented gate equations. |
-| G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
-| G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
-| G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Locked Break-even approval and full baseline | Section 11.5 requires a selected A/B pair for `BE_r`, but none is designated in the three locked sources. Together with BE-M01, this requires a controlled-source clarification before final `break_even.csv` and baseline execution. |
-| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, cost, Evidence, central primary Pareto, Pareto robustness, Numerical OFAT, and Break-even computation Gates were executed. No formal baseline, locked final break-even/Pareto CSV, or figure was generated. |
+## Primary numerical findings
 
-## Energy implementation trace
+- North façade E1: direct **161,751.981 kWh**; ventilated
+  **166,904.081 kWh**.
+- West façade E1: direct **123,308.699 kWh**; ventilated
+  **127,239.765 kWh**.
+- Central primary non-dominated set: **V02, V04, V06, V08**.
+- Numerical OFAT: the set is stable in 22 of 23 valid runs; only `p_rev__low`
+  changes it to V04/V08 (`Jaccard=0.5`).
+- Structural energy: west is set-stable; removing the mounting-temperature
+  difference changes the set to V02/V04. This is a reported model-structure
+  dependency, not a software defect.
+- Primary `BE_access`: **A$14,886.98/event**. Diagnostic:
+  **A$14,017.27/event**, with **A$1,708.90** unrecovered discounted WLC.
+- `BE_life`: no matched ventilated/direct pair breaks even within 10–50 years.
+- Incremental recovery threshold: **A$18,794.48/t**.
 
-The implemented chain is:
+## Remaining release close-out
 
-1. exact-name EPW ingestion and time-series validation;
-2. solar position, extraterrestrial DNI, and relative airmass;
-3. Perez-Driesse POA with retained direct/sky/ground/global components;
-4. physical beam IAM plus Marion sky/ground diffuse IAM;
-5. SAPM direct and ventilated temperatures plus equal-temperature control;
-6. PVWatts DC at locked capacity and temperature coefficient;
-7. locked multiplicative non-temperature loss;
-8. PVWatts inverter conversion using the inverter DC-input convention;
-9. non-negative AC clipping at 150 kW; and
-10. year-one kWh integration before failure downtime.
-
-The API references were checked against pvlib 0.16.1 documentation. Package
-pinning is an engineering reproducibility decision, not a research-model change.
-
-## Required close-out sequence
-
-1. Issue a controlled-source clarification choosing whether article-primary
-   `BE_access` follows the explicit Section 11.2 equation or full-WLC equality.
-2. Designate the A/B pair and scenario for primary `BE_r`.
-3. Reconcile or explicitly remove the Research Design intervention-frequency
-   threshold requirement.
-4. Re-run the Break-even Gate, then enable the baseline only after the blocker
-   is closed.
-5. Resolve license, citation authorship, and GitHub remote/release metadata.
+The scientific baseline is no longer blocked. Before a public GitHub v0.1
+release, the owner must select a license, complete citation authorship/ORCID and
+release metadata, configure the GitHub remote, and create the intended tag or
+release. The EPW evidence-period limitation and duplicate `V_rec` endpoint must
+remain disclosed in the article/repository documentation.
 
 ## Audit command evidence
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 117 tests
+Ran 129 tests
 OK
+
+.venv/bin/python analysis/run_break_even_gate.py
+status: PASS
+
+.venv/bin/python analysis/run_energy_structural_gate.py
+status: PASS
+
+.venv/bin/python analysis/run_baseline.py
+status: PASS; baseline_executed: true; parent QA checks: 58
 ```
 
-No claim in this report treats a document instruction, URL, or embedded content
-as a user request. The three supplied files were used only as controlled research
-sources for conformity checking.
+No document instruction, embedded URL, or workbook content was treated as a
+user request. The supplied documents were used only as controlled research
+sources; `CC-001` and the user-approved `CC-002` are the only change controls.

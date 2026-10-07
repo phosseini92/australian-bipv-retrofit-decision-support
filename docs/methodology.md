@@ -85,21 +85,24 @@ That duplicate endpoint is retained in the audit trail but excluded from the
 Pareto-inclusion denominator. Inclusion frequency and Jaccard similarity are
 reported only as deterministic robustness summaries, never probabilities.
 
-Break-even calculations implement the five named output families without
-inventing unsupported tariffs. Matched reversible/low pairs are used for
-premium, access, and incremental-recovery thresholds; matched
-ventilated/direct pairs are searched at every integer horizon from 10 through
-50 years, with scheduled inverter replacement at each locked 15-year interval.
-Bounded discount-rate diagnostics cover 0–15% real and report missing or
-non-unique roots with explicit status strings rather than NaN/Inf.
+The two energy structural runs repeat the complete downstream lifecycle, cost,
+evidence, and primary Pareto chain. West orientation substitutes only the
+locked west azimuth. The equal-temperature control uses the hourly arithmetic
+mean temperature result for both mounting categories and otherwise leaves the
+central chain unchanged.
 
-Two locked-source issues prevent final Gate approval. First, the explicit
-Section 11.2 access formula includes only the initial reversibility premium,
-while the WLC equation makes O&M proportional to premium-inclusive `C0`; both
-values are therefore reported, with the WLC residual exposed. Second, Section
-11.5 requires a “selected pairwise comparison” but does not identify A and B.
-All matched one-factor candidates are evaluated diagnostically, but none is
-promoted to the primary `BE_r` result. Research Design v2.0 also names an
-intervention-frequency threshold for which the Analysis Specification and
-Input Table provide no output equation or scenario. The formal baseline stays
-disabled pending controlled-source clarification.
+Break-even calculations implement the five named output families without
+inventing unsupported tariffs. Under approved `CC-002 D1-B`, full discounted
+WLC equality is the primary access/intervention-saving threshold; the literal
+initial-premium-only Section 11.2 value remains a labelled diagnostic. D2-A
+makes all four matched reversible/low comparisons the symmetric primary
+`BE_r` set over 0–15% real. D3-A keeps intervention frequency as the registered
+`λ_mod`/`f_fail` OFAT input and does not create an unsupported independent
+threshold. Missing and non-unique roots always use explicit status strings and
+null values rather than NaN/Inf.
+
+The formal baseline runs only after all parent Gate assertions pass. Its six
+CSV tables, manifest, and three figures are first written to a staging
+directory, hashed, and then moved into the locked output locations. This export
+workflow is an engineering reproducibility control and does not alter a model
+input, equation, criterion, or decision rule.
