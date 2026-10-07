@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "status": "LIFECYCLE_ENERGY_GATE_PASSED_BASELINE_DISABLED",
+  "status": "COST_GATE_PASSED_BASELINE_DISABLED",
   "simulation_enabled": false,
   "module_status": {
     "weather": "controlled_epw_validated",
@@ -12,7 +12,8 @@
     "availability": "expected_energy_weighted_equation_tested",
     "replacement": "intervention_burden_equations_tested",
     "lifecycle_energy": "integration_gate_passed",
-    "cost_pscf_pareto_break_even_sensitivity": "skeleton_only"
+    "lifecycle_cost": "integration_gate_passed",
+    "pscf_pareto_break_even_sensitivity": "skeleton_only"
   },
   "input_source": "data/inputs/source_manifest.yaml",
   "invariants": {

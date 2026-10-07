@@ -18,3 +18,10 @@ artifact before it is reflected in code.
 normalisation that replaces only the mixed historical year labels in the TMYx
 index. All 8,760 source rows, values, calendar positions, and original
 timestamps are preserved and audited.
+
+The central cost gate records access cost and end-of-life removal cost as zero
+only because the locked specification excludes unsupported tariffs from the
+central accounting and reserves them for break-even/stress analysis. These
+bookkeeping zeros must not be described as evidence that access or removal is
+costless. Likewise, the reported transport component is contained within the
+all-in recycling fee and is never added to it.

@@ -4,7 +4,7 @@ Repository v0.1 implements the first controlled milestone for the APSRC study
 *Beyond Energy Yield: Lifecycle Value and Circularity Readiness of Australian
 BIPV Retrofits*.
 
-## Repo v0.1 audit and energy-gate status
+## Repo v0.1 audit and integration-gate status
 
 This version contains:
 
@@ -30,9 +30,17 @@ The subsequent degradation → availability → lifecycle-energy gate has also
 passed. It applies the locked linear degradation equation, expected-event
 availability approximation, disturbed-area and handled-scope burdens, one
 permanently replaced product per event, material replacement mass, and the
-common scheduled inverter years. These are gate-validation results, not a
-completed baseline. Cost, PSCF, Pareto, break-even, and sensitivity modules
-remain closed, and baseline execution is still intentionally disabled.
+common scheduled inverter years.
+
+The lifecycle-cost and replacement-bookkeeping gate has passed as well. It
+implements initial mounting and reversibility cost, annual O&M, expected
+corrective material replacement, the common reference inverter allowance,
+end-of-life recycling/recovery rules, end-of-year discounting, WLC, and WLC per
+lifetime kWh. Unsupported access and removal tariffs remain excluded from the
+central accounting and reserved for break-even analysis. These are
+gate-validation results, not a completed baseline. PSCF, Pareto, break-even,
+and sensitivity modules remain closed, and baseline execution is still
+intentionally disabled.
 
 ## Controlled sources
 
@@ -60,6 +68,7 @@ python -m venv .venv
 .venv/bin/python -m unittest discover -s tests -v
 .venv/bin/python analysis/run_energy_gate.py
 .venv/bin/python analysis/run_lifecycle_energy_gate.py
+.venv/bin/python analysis/run_cost_gate.py
 ```
 
 `requirements-lock.txt` records the fully resolved environment used for the
@@ -67,7 +76,7 @@ formal audit and integration-gate tests.
 
 The baseline, sensitivity, Pareto, and break-even entry points continue to fail
 closed until the downstream implementation gates pass. The authorised numerical
-runners at this stage are the energy gate and lifecycle-energy gate; neither is
+runners at this stage are the energy, lifecycle-energy, and cost gates; none is
 the formal baseline.
 
 ## Repository map

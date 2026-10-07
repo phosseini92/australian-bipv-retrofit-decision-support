@@ -1,9 +1,9 @@
-# Formal Audit — Repo v0.1, Energy, and Lifecycle-Energy Gates
+# Formal Audit — Repo v0.1, Energy, Lifecycle-Energy, and Cost Gates
 
-Audit date: 2026-10-06  
+Audit date: 2026-10-07
 Audit scope: repository structure, controlled inputs, locked variant/design
-contract, QA registration, energy and lifecycle-energy implementation, and
-readiness to run.
+contract, QA registration, energy, lifecycle-energy, and cost implementation,
+and readiness to run.
 Decision rule: `PASS` means evidence satisfies the locked contract;
 `MISMATCH` means a non-scientific repository/release gap exists; `BLOCKER`
 means execution cannot safely proceed.
@@ -19,11 +19,13 @@ means execution cannot safely proceed.
   pass.
 - Lifecycle-energy gate: **PASS** — locked degradation, availability,
   intervention-burden, and scheduled-year equations pass their scoped QA.
+- Lifecycle-cost gate: **PASS** — locked initial, recurring, corrective,
+  inverter, EoL, discounting, WLC, and cost-intensity equations pass.
 - Baseline-execution gate: **BLOCKED** — no baseline was run.
 - Public GitHub-release gate: **HOLD** — license, citation authorship, and remote
   repository metadata remain unresolved.
 
-Summary: **35 PASS / 5 MISMATCH / 1 BLOCKER** across 41 checks.
+Summary: **43 PASS / 5 MISMATCH / 1 BLOCKER** across 49 checks.
 
 ## Controlled-source evidence
 
@@ -73,15 +75,23 @@ recomputed hashes of the three supplied files.
 | L03 | PASS | Linear degradation | Every annual factor uses `max(0, 1 - d×(y-1))`; year 1 is unchanged and no compound recursion or second LID deduction is present. |
 | L04 | PASS | Expected availability | Availability uses the locked failure rate, downtime, disturbed-area fraction, 8,760-hour denominator, clipping, and energy-weighted lifetime ratio. It remains separate from `L_sys`. |
 | L05 | PASS | Intervention and material burden | Cumulative disturbed area and handled scope follow the locked equations. Exactly one failed product is replaced per event; adjacent assembly products do not inflate replacement mass. The 25.5-kg unit mass is recovered exactly from locked `M_EOL × 1000 / N_mod,eq`. |
-| L06 | PASS | Scheduled inverter years | Service-life multiples strictly within the horizon reproduce the locked cases: year 15 for T=25/30 and years 15 and 30 for T=35. The monetary allowance remains for the cost gate. |
+| L06 | PASS | Scheduled inverter years | Service-life multiples strictly within the horizon reproduce the locked cases: year 15 for T=25/30 and years 15 and 30 for T=35. The common monetary allowance is verified in K05. |
 | L07 | PASS | Controlled lifecycle-energy integration | All eight variants produce finite, non-negative 30-year metrics. Scoped Q04, Q06–Q09, and Q14 checks pass; connection has no assumed time benefit, and replacement scope affects net energy only through disturbed-area availability. |
+| K01 | PASS | Locked cost input binding | Currency basis, horizon, discount rate, mounting and reversibility costs, O&M, corrective material, inverter, recycling, recovery, and EoL rules are loaded from the controlled snapshot without numeric defaults. |
+| K02 | PASS | Cached cost derivations | `C_direct`, `C_vent`, `ΔC_rev`, cached O&M values, failed-product material cost, recycling decomposition, and owner recovery are independently recomputed and hard-fail on mismatch. |
+| K03 | PASS | Initial and O&M cost | Each variant follows `C0 = A_BIPV × C_mount + C_rev`; annual O&M is `m_OM × C0`. The 5% reversibility premium remains visibly tagged as a structural-test point. |
+| K04 | PASS | Corrective replacement bookkeeping | Expected annual material cost is `f_fail × C_rep,mat`. Exactly one failed product is costed per event, adjacent assembly products add zero material cost, and unsupported access tariffs remain excluded from central WLC. |
+| K05 | PASS | Common inverter allowance | `C_inv,ref = p_invrep × (A_BIPV × C_BIPV)` is independent of mounting and reversibility premiums. Its nominal amount, year-15 schedule, and discounted PV are identical across V01–V08, closing Q08 for the cost gate. |
+| K06 | PASS | End-of-life accounting | Central owner recovery is zero. EoL removal remains a break-even/stress variable. The transport component plus processing component reconciles to the all-in recycling fee and is not added a second time. |
+| K07 | PASS | Discounted WLC and cost intensity | End-of-year recurring costs, scheduled inverter replacement, and terminal EoL cost reconcile to component present values and WLC. `CostIntensity = WLC/E_life`; electricity revenue is not inserted into WLC. |
+| K08 | PASS | Controlled cost integration | All eight variants produce finite, non-negative cost outputs. Internal C01–C04 and formal Q08–Q10/Q14 checks pass. Replacement scope creates no unsupported central WLC difference. |
 | V01 | PASS | Direct dependency pinning | NumPy 2.3.5, pandas 2.2.3, pvlib 0.16.1, and SciPy 1.18.1 are pinned; the fully resolved test environment is recorded in `requirements-lock.txt`. |
-| V02 | PASS | Automated validation | 53 tests pass: input integrity, variant matrix, lifecycle/cost/circularity contracts, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, energy tests, and lifecycle equation/integration tests. |
+| V02 | PASS | Automated validation | 67 tests pass: input integrity, variant matrix, lifecycle/cost/circularity contracts, Pareto contract, Q01–Q14 registration, fail-closed runners, controlled EPW validation, energy and lifecycle tests, and cost equation/integration tests. |
 | G01 | MISMATCH | License readiness | `LICENSE` is an explicit all-rights-reserved placeholder pending author approval; no public open-source license has been selected. |
 | G02 | MISMATCH | Citation metadata | `CITATION.cff` lacks author/ORCID and release identifier metadata. No author identity was inferred. |
 | G03 | MISMATCH | GitHub remote metadata | The local Git repository has no configured GitHub remote or release/tag. No external repository was created or modified. |
-| B01 | BLOCKER | Full baseline execution | Cost, PSCF, Pareto, sensitivity, and break-even modules remain skeletons. The baseline runner correctly stays disabled until those gates are implemented and tested. |
-| S01 | PASS | No premature baseline | The authorised energy and lifecycle-energy gates were executed. No formal baseline, sensitivity, Pareto, break-even table, or figure was generated. |
+| B01 | BLOCKER | Full baseline execution | PSCF, Pareto, sensitivity, and break-even modules remain skeletons. The baseline runner correctly stays disabled until those gates are implemented and tested. |
+| S01 | PASS | No premature baseline | The authorised energy, lifecycle-energy, and cost gates were executed. No formal baseline, sensitivity, Pareto, break-even table, or figure was generated. |
 
 ## Energy implementation trace
 
@@ -103,8 +113,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ## Required close-out sequence
 
-1. Complete cost/replacement and PSCF-informed
-   evidence, Pareto, sensitivity, and break-even modules.
+1. Complete PSCF-informed evidence, Pareto, sensitivity, and break-even modules.
 2. Resolve license, citation authorship, and GitHub remote/release metadata.
 3. Enable the baseline runner only after all Q01–Q14 assertions are executable.
 
@@ -112,7 +121,7 @@ pinning is an engineering reproducibility decision, not a research-model change.
 
 ```text
 .venv/bin/python -m unittest discover -s tests -v
-Ran 53 tests
+Ran 67 tests
 OK
 ```
 

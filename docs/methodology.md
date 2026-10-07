@@ -37,6 +37,16 @@ event, so replacement material mass is common across variants.
 
 The degradation → availability → lifecycle-energy integration gate has passed
 Q04, Q06, Q07, Q09, Q14, and the scheduled-year prerequisite for Q08. The
-future cost gate must recheck the monetary inverter allowance before Q08 is
-closed for the full baseline. Cost, PSCF-informed evidence, Pareto,
-sensitivity, break-even, and full baseline execution remain disabled.
+cost gate then applies the locked initial-cost, O&M, corrective material,
+inverter, EoL, discounting, WLC, and cost-intensity equations. Q08 is closed for
+the central cost implementation because both the nominal and discounted
+inverter allowance are common across variants.
+
+The central accounting assigns no unsupported access or EoL-removal tariff.
+The corresponding zero values mean exclusion from the central WLC, not that
+those services are costless; they remain explicit break-even/stress variables.
+The all-in recycling fee already contains transport, so its transport component
+is reported as a decomposition and is not added again. Electricity is not
+monetised inside WLC because lifetime electricity remains a separate decision
+criterion. PSCF-informed evidence, Pareto, sensitivity, break-even, and full
+baseline execution remain disabled.
